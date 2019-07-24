@@ -37,4 +37,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function departamento()
+    {
+        return $this->morphOne('App\Departamento');
+    }
+    public function devision()
+    {
+        return $this->morphOne('App\Division');
+    }
+    public function actividades()
+    {
+	return $this->belongsTo('App\Actividad');
+    }
 }
