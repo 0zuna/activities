@@ -24,5 +24,9 @@ Route::group(['prefix' => 'auth'], function () {
 	Route::get('logout', 'AuthController@logout');
 	Route::post('upexcel', 'ExcelController@index');
 	Route::get('data', 'AdminController@index');
+	Route::get('users', 'AdminController@users');
+	Route::post('jefe_dep', 'AdminController@jefe_dep');
+	Route::post('actividad_user', 'AdminController@actividad_user');
+	Route::post('newActivity', 'AdminController@newActivity');
     });
 });

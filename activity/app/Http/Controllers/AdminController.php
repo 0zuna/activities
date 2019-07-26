@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Departamento;
 use App\User;
+use App\Actividad;
+use App\Mail\NotifyMail;
+
 
 class AdminController extends Controller
 {
@@ -19,5 +22,30 @@ class AdminController extends Controller
 			$depa[$k]->user=User::find($v->user_id);
 		}
 		return response()->json($depa);
+	}
+	public function users(){
+		return response()->json(User::all());
+	}
+	public function jefe_dep(Request $request){
+		$dep=Departamento::find($request->departamento_id);
+		$dep->user_id=$request->user_id;
+		$dep->update();
+	}
+	public function actividad_user(Request $request){
+		$actividades=User::find($request->user_id)->actividades()->get();
+		return response()->json($actividades);
+	}
+	public function newActivity(Request $request){
+        	$user = User::find($request->user_id);
+		$actividad=new Actividad();
+		$actividad->actividad=$request->actividad;
+		$actividad->save();
+        	$actividad->users()->attach($user);
+		\Mail::send('mail.text', ['actividad'=>$actividad->actividad], function ($message) {
+			$message->from('desarrollo@usupso.com.mx', 'desarrollo');
+			$message->subject('Nueva Actividad');
+			$message->to('er1k_92@hotmail.com');
+		});
+		return response()->json($actividad);
 	}
 }
