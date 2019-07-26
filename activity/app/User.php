@@ -48,6 +48,6 @@ class User extends Authenticatable
     }
     public function actividades()
     {
-	return $this->belongsTo('App\Actividad');
+	return $this->belongsToMany('App\Actividad');
     }
 }

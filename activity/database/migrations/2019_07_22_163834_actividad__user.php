@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UserActividad extends Migration
+class ActividadUser extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class UserActividad extends Migration
     public function up()
     {
         //
-        Schema::create('user_actividad', function (Blueprint $table) {
+        Schema::create('actividad_user', function (Blueprint $table) {
             $table->bigIncrements('id');
 	    $table->unsignedBigInteger('user_id')->nullable();
 	    $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

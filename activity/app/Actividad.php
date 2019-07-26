@@ -11,4 +11,8 @@ class Actividad extends Model
 	{
 		return $this->belongsTo('App\Unidad');
 	}
+	public function users()
+	{
+		return $this->belongsToMany('App\User');
+	}
 }
