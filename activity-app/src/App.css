@@ -31,3 +31,4 @@
     transform: rotate(360deg);
   }
 }
+.modal { width: 90% !important ; height: 90% !important ; }
