@@ -17,7 +17,9 @@ const Jerarquia = ({actividad}) =>{
 		if(actividad.users){
 		setItems([actividad])
 		axi.post('/api/auth/actividadJerarquia',{act_referencia:actividad.id})
-		.then(r=>console.log(setItems(r.data)))
+		.then(r=>{
+			r.data.length>0&&setItems(r.data)
+		})
 		.catch(r=>alert(r))
 		}
 	},[actividad])
