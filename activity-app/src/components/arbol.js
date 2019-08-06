@@ -4,11 +4,13 @@ import {UserContext} from '../UserContext';
 import M from 'materialize-css';
 import Departamento from './modalDepartamento'
 import Division from './modalDivision'
+import Unidad from './unidad'
 
 const Arbol=()=>{
 	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
-	const [departamento,setDepartamento]=useState({})
-	const [division,setDivision]=useState({})
+	const [departamento,setDepartamento]=useState({user:{actividades:[]}})
+	const [division,setDivision]=useState({user:{actividades:[]}})
+	const [unidad,setUnidad]=useState({})
 	useEffect(()=>{
 		//init
 		M.AutoInit();
@@ -37,11 +39,15 @@ const Arbol=()=>{
 			})
 			.catch(r=>alert(r))
 	}
+	const _unniShow=(unni)=>{
+		setUnidad(unni)
+	}
 
 	return (
 		<div>
 		<Departamento departamento={departamento} setDepartamento={setDepartamento} />
 		<Division division={division} setDivision={setDivision} />
+		<Unidad unidad={unidad} setUnidad={setUnidad} />
 		<div style={{overflowX: 'scroll',overflowY: 'hidden',whiteSpace:'nowrap'}}>
 		<div className="row" style={{ width:'8000px',marginBottom:'50px'}}>
 			{arbol.map(d=>{
@@ -59,7 +65,7 @@ const Arbol=()=>{
 						{div.unidads.map(unni=>{
 						return <div key={unni.id} className='row'>
 						<div className='col'>
-				<a className="waves-effect waves-light btn-large white black-text modal-trigger" data-target="modalUnidad" onClick={()=>_departamentoShow(d)}>{unni.unidad}</a>
+				<a className="waves-effect waves-light btn-large white black-text modal-trigger" data-target="modalUnidad" onClick={()=>_unniShow(unni)}>{unni.unidad}</a>
 						</div>
 						</div>
 						})

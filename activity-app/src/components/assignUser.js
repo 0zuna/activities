@@ -27,7 +27,7 @@ const AssignUser=({assign})=>{
 					</form>
 				</div>
 			</nav>
-		{users.filter(u=>u.name.includes(search)).map(u=>
+		{users.filter(u=>u.name.toLowerCase().includes(search.toLowerCase())).map(u=>
 		<div key={u.id} className="col s4 m8 offset-m2 l4">
 			<div className="card-panel grey lighten-5 z-depth-1">
 				<div className="row valign-wrapper">
@@ -45,7 +45,7 @@ const AssignUser=({assign})=>{
 				</div>
 			</div>
 		</div>
-	)
+	).slice(0,6)
       }
 
 

@@ -31,4 +31,19 @@
     transform: rotate(360deg);
   }
 }
-.modal { width: 90% !important ; height: 90% !important ; }
+.modal { width: 100% !important ; height: 100% !important ; }
+ .modal.full {
+      width: 100vw;
+      max-height: 100vh;
+      height: 100vh;
+      top:0 !important;
+  }
+.scroll-box {
+  overflow-y: scroll;
+  height: 30vh;
+  padding: 1rem
+}
+.datepicker-modal,.timepicker-modal{
+	width: 60% !important;
+	height: 60% !important;
+}

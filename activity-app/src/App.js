@@ -4,8 +4,8 @@ import './App.css';
 import 'materialize-css';
 import 'materialize-css/sass/materialize.scss';
 //import Dashboard from './components/dashboard'
-import Login from './components/login'
-import Create from './components/create'
+import Login from './components/auth/login'
+import Create from './components/auth/signup'
 import { BrowserRouter as Router, Route, /*Link*/ } from "react-router-dom";
 import {UserProvider} from './UserContext';
 

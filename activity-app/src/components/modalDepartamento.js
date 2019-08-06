@@ -9,7 +9,7 @@ const Departamento = ({departamento,setDepartamento}) =>{
 	useEffect(()=>{
 		const AUTH_TOKEN = localStorage.getItem('access_token');
 		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-	},[])
+	})
 	
 	const _assignDep=(user)=>{
 		axi.post('/api/auth/jefe_dep',{departamento_id:departamento.id,user_id:user.id})
@@ -20,7 +20,7 @@ const Departamento = ({departamento,setDepartamento}) =>{
 	}
 	const _newActivity=(e)=>{
 		if(e.key=='Enter'){
-		axi.post('/api/auth/newActivity',{...data.newActividad,user_id:departamento.user.id})
+		axi.post('/api/auth/newActivityToUser',{...data.newActividad,user_id:departamento.user.id})
 			.then(r=>{
 				setData({...data,newActividad:{actividad:''}})
 				setDepartamento({...departamento,user:{...departamento.user,actividades:[...departamento.user.actividades,r.data]}})
@@ -29,7 +29,7 @@ const Departamento = ({departamento,setDepartamento}) =>{
 		}
 	}
 	return (
-		<div id="modalDepartamento" className="modal">
+		<div id="modalDepartamento" className="modal modal-fixed-footer">
 			<div className="modal-content">
 				<h4>{departamento.departamento}<small> (Departamento)</small></h4>
 				<p>telefono: {departamento.telefono}</p>

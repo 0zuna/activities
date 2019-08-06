@@ -20,7 +20,7 @@ const Division = ({division,setDivision}) =>{
 	}
 	const _newActivity=(e)=>{
 		if(e.key=='Enter'){
-		axi.post('/api/auth/newActivity',{...data.newActividad,user_id:division.user.id})
+		axi.post('/api/auth/newActivityToUser',{...data.newActividad,user_id:division.user.id})
 			.then(r=>{
 				setData({...data,newActividad:{actividad:''}})
 				setDivision({...division,user:{...division.user,actividades:[...division.user.actividades,r.data]}})
@@ -29,7 +29,7 @@ const Division = ({division,setDivision}) =>{
 		}
 	}
 	return (
-		<div id="modalDivision" className="modal">
+		<div id="modalDivision" className="modal modal-fixed-footer">
 			<div className="modal-content">
 				<h4>{division.division}<small> (Division)</small></h4>
 				<p>telefono: {division.telefono}</p>
