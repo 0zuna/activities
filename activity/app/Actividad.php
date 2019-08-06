@@ -15,4 +15,12 @@ class Actividad extends Model
 	{
 		return $this->belongsToMany('App\User');
 	}
+	public function subActividades()
+	{
+		return $this->hasMany('App\SubActividad');
+	}
+	public function jerarquia()
+	{
+		return $this->hasMany('App\Jerarquia');
+	}
 }

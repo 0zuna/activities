@@ -7,10 +7,6 @@ use Illuminate\Http\Request;
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -28,6 +24,14 @@ Route::group(['prefix' => 'auth'], function () {
 	Route::post('jefe_dep', 'AdminController@jefe_dep');
 	Route::post('jefe_div', 'AdminController@jefe_div');
 	Route::post('actividad_user', 'AdminController@actividad_user');
+	Route::post('newActivityToUser', 'AdminController@newActivityToUser');
+	Route::put('updateActivity', 'AdminController@updateActivity');
+	Route::post('newSubActivity', 'AdminController@newSubActivity');
+	Route::post('assignActivity', 'AdminController@assignActivity');
+	Route::post('unAssignActivity', 'AdminController@unAssignActivity');
 	Route::post('newActivity', 'AdminController@newActivity');
+	Route::post('pushJerarquia', 'AdminController@pushJerarquia');
+	Route::put('updateJerarquia', 'AdminController@updateJerarquia');
+	Route::post('actividadJerarquia', 'AdminController@actividadJerarquia');
     });
 });

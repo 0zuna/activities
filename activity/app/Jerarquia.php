@@ -4,11 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SubActividad extends Model
+class Jerarquia extends Model
 {
     //
-	public function actividad()
-	{
+	public function actividads(){
 		return $this->belongsTo('App\Actividad');
 	}
 }

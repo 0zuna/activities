@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSubActividadsTable extends Migration
+class CreateJerarquiasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateSubActividadsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sub_actividads', function (Blueprint $table) {
+        Schema::create('jerarquias', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('subactividad');
-            $table->string('status')->default('En Proceso');
-	    $table->foreign('actividad_id')->references('id')->on('actividads')->onDelete('cascade');
 	    $table->unsignedBigInteger('actividad_id')->nullable();
+	    $table->foreign('actividad_id')->references('id')->on('actividads')->onDelete('cascade');
+	    $table->unsignedBigInteger('act_referencia')->nullable();
+	    $table->foreign('act_referencia')->references('id')->on('actividads')->onDelete('cascade');
+	    $table->unsignedBigInteger('fase')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateSubActividadsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_actividads');
+        Schema::dropIfExists('jerarquias');
     }
 }

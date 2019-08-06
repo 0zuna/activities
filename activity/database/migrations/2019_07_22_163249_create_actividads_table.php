@@ -17,10 +17,12 @@ class CreateActividadsTable extends Migration
             $table->bigIncrements('id');
             $table->string('actividad');
             $table->string('descripcion')->nullable();
-	    $table->string('status')->default('En Proceso');
+            $table->date('fecha')->nullable();
+            $table->time('hora')->nullable();
+	    $table->timestamp('confirmacion')->nullable();
             $table->boolean('reporte')->default(false);
-	    $table->foreign('unidad_id')->references('id')->on('unidads')->onDelete('cascade');
 	    $table->unsignedBigInteger('unidad_id')->nullable();
+	    $table->foreign('unidad_id')->references('id')->on('unidads')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -32,6 +34,7 @@ class CreateActividadsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('actividad_user');
         Schema::dropIfExists('actividads');
     }
 }

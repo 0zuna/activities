@@ -1,1 +1,1 @@
-<div>Usted a sido asignado a la actividad: {{$actividad}}</div>
+<div>Usted ha sido asignado a la actividad: {{$actividad}}</div>
