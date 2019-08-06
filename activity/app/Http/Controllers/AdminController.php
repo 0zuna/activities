@@ -151,4 +151,11 @@ class AdminController extends Controller
 		}
 		return response()->json($actividades);
 	}
+	public function deleteJerarquia(Request $request)
+	{
+		$acto=Jerarquia::where('act_referencia',$request->act_referencia)
+			->where('actividad_id',$request->actividad_id)
+			->delete();
+		return response()->json($request);
+	}
 }

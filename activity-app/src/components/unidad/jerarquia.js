@@ -75,7 +75,11 @@ const Jerarquia = ({actividad}) =>{
 	}
 	const _deleteFase=(f)=>{
 		const fases=items.filter(fa=>f.id!==fa.id)
-		setItems(fases)
+		axi.post('/api/auth/deleteJerarquia',{act_referencia:f.id,actividad_id:actividad.id})
+		.then(r=>{
+			setItems(fases)
+		})
+		.catch(r=>alert(r))
 	}
 
 	return (

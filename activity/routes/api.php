@@ -15,7 +15,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');
-
     Route::group(['middleware' => 'auth:api'], function() {
 	Route::get('logout', 'AuthController@logout');
 	Route::post('upexcel', 'ExcelController@index');
@@ -33,5 +32,6 @@ Route::group(['prefix' => 'auth'], function () {
 	Route::post('pushJerarquia', 'AdminController@pushJerarquia');
 	Route::put('updateJerarquia', 'AdminController@updateJerarquia');
 	Route::post('actividadJerarquia', 'AdminController@actividadJerarquia');
+	Route::post('deleteJerarquia', 'AdminController@deleteJerarquia');
     });
 });
