@@ -65,6 +65,7 @@ class AdminController extends Controller
 		$act=Actividad::find($request->id);
 		$act->descripcion=$request->descripcion;
 		$act->fecha=$request->fecha;
+		$act->periodicidad=$request->periodicidad;
 		$act->hora=$request->hora;
 		$act->update();
 		return response()->json($act);
