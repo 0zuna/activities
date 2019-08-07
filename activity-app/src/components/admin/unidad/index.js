@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import AssignUser from '../assignUser'
 import M from 'materialize-css';
-import { axi } from '../../config';
+import { axi } from '../../../config';
 import Jerarquia from './jerarquia'
 import Resumen from './resumen'
 //import $ from 'jquery'

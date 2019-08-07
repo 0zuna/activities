@@ -1,7 +1,7 @@
 import React,{useEffect, useContext, useState} from 'react';
 import M from 'materialize-css';
-import {UserContext} from '../UserContext';
-import { axi } from '../config'
+import {UserContext} from '../../UserContext';
+import { axi } from '../../config'
 import Arbol from './arbol'
 
 const Dash=()=>{

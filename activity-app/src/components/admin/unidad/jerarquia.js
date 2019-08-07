@@ -1,8 +1,8 @@
 import React,{ useEffect, useContext, useState } from 'react'
-import {UserContext} from '../../UserContext';
+import {UserContext} from '../../../UserContext';
 import AssignJerarquia from './assignJerarquia'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { axi } from '../../config';
+import { axi } from '../../../config';
 
 
 const Jerarquia = ({actividad}) =>{

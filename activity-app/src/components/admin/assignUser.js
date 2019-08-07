@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 //import M from 'materialize-css';
-import { axi } from '../config'
-
+import { axi } from '../../config'
 
 const AssignUser=({assign})=>{
 	const [users, setUsers]=useState([])

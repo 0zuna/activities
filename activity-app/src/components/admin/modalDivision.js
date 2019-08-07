@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AssignUser from './assignUser'
-import { axi } from '../config'
+import { axi } from '../../config'
 
 
 const Division = ({division,setDivision}) =>{

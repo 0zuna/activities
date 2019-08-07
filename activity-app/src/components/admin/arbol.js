@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { axi } from '../config'
-import {UserContext} from '../UserContext';
+import { axi } from '../../config'
+import {UserContext} from '../../UserContext';
 import M from 'materialize-css';
 import Departamento from './modalDepartamento'
 import Division from './modalDivision'

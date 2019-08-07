@@ -1,11 +1,14 @@
 import React,{ useEffect } from 'react'
-import { axi } from '../../config';
+import { axi } from '../../../config';
+import M from 'materialize-css';
 
 const Resumen = ({data, setData, unidad, setUnidad}) => {
 	useEffect(()=>{
 		const AUTH_TOKEN = localStorage.getItem('access_token');
 		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-	},[])
+		var elems = document.querySelectorAll('select');
+		M.FormSelect.init(elems, {});
+	},[data])
 	const _newSub=(e)=>{
 		if(e.key=='Enter'){
 			axi.post('/api/auth/newSubActivity',{actividad_id:data.actividad.id,subactividad:data.newSubActividad})
@@ -13,12 +16,9 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 				setData({...data,actividad:{...data.actividad,sub_actividades:[...data.actividad.sub_actividades,r.data]}})
 				console.log(r.data)
 			})
-			//setData({...data,actividad:{...data.actividad,sub_actividades:[...data.actividad.sub_actividades,{subactividad:data.newSubActividad}]}})
-			//setData({...data,newSubActividad:''})
 		}
 	}
 	const _updateActivity=()=>{
-		//console.log(data)
 		axi.put('/api/auth/updateActivity',data.actividad)
 		.then(r=>{
 			const acto=unidad.actividades.map(a=>{
@@ -40,11 +40,22 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 				<div className="row">
 					<span className="badge yellow white-text">{'En Proceso'}</span>
 				</div>
+				<div className="input-field col s12">
+					<select value={data.actividad.periodicidad||''} onChange={e=>setData({...data,actividad:{...data.actividad,periodicidad:e.target.value}})}>
+						<option value="" disabled>Periodicidad</option>
+						<option value="unica">Unica</option>
+						<option value="semanal">Semanal</option>
+						<option value="mensual">Mensual</option>
+					</select>
+					<label>Periodicidad</label>
+				</div>
 				<div className="row">
+				{data.actividad.periodicidad=='unica'&&
 					<div className="col s6">
 						<label htmlFor="date">Entrega</label>
 						<input onChange={e=>setData({...data,actividad:{...data.actividad,fecha:e.target.value}})} value={data.actividad.fecha||''} id="date" type="text" className="datepicker" placeholder="fecha"/>
 					</div>
+				}
 					<div className="col s6">
 						<label htmlFor="time">Hora</label>
 						<input onChange={e=>setData({...data,actividad:{...data.actividad,hora:e.target.value}})} value={data.actividad.hora||''} id="time" type="text" className="timepicker" placeholder="hora"/>

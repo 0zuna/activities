@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 //import M from 'materialize-css';
-import { axi } from '../../config'
-import {UserContext} from '../../UserContext';
+import { axi } from '../../../config'
+import {UserContext} from '../../../UserContext';
 
 const AssignJerarquia=({assign})=>{
 	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
