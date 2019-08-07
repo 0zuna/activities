@@ -2,7 +2,8 @@ import React,{ useState, useContext, useEffect } from 'react'
 import { axi } from '../../config'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { UserContext } from '../../UserContext';
-import Dashboard from '../user/dashboard'
+import Empleado from '../user/dashboard'
+import Admin from '../admin/dashboard'
 
 
 const Login=props=>{
@@ -36,7 +37,7 @@ const Login=props=>{
 			Loading Game...
 			</div>
 			)
-	if(auth)return <Dashboard />
+	if(auth)return user.rol=='empleado'?<Empleado />:<Admin />
 	return (
 		<div className="row center">
 			<div className="col s6 m3" style={{width: '300px',height: '100px',padding: '20px',position: 'absolute',top: '30%',left: '50%',margin: '-70px 0 0 -170px'}}>
