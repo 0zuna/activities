@@ -21,7 +21,7 @@ const Dash=()=>{
 		});
 	},[])
 	const _salir=()=>{
-		axi.get('/api/auth/logout')
+		axi.get('/api/logout')
 		.then(r=>{
 			console.log(r.data)
 			setAuth(false)
@@ -31,7 +31,7 @@ const Dash=()=>{
 		var reader = new FileReader();
 		reader.readAsDataURL(e.target.files[0]);
 		reader.onload = () => {
-			axi.post('/api/auth/upexcel',{excel:reader.result})
+			axi.post('/api/upexcel',{excel:reader.result})
 			.then(response=>{
 				console.log(response.data)
 				setArbol(response.data)

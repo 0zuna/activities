@@ -12,7 +12,7 @@ const Division = ({division,setDivision}) =>{
 	},[])
 	
 	const _assignDiv=(user)=>{
-		axi.post('/api/auth/jefe_div',{division_id:division.id,user_id:user.id})
+		axi.post('/api/jefe_div',{division_id:division.id,user_id:user.id})
 			.then((r)=>{
 				setDivision({...division,user})
 			})
@@ -20,7 +20,7 @@ const Division = ({division,setDivision}) =>{
 	}
 	const _newActivity=(e)=>{
 		if(e.key=='Enter'){
-		axi.post('/api/auth/newActivityToUser',{...data.newActividad,user_id:division.user.id})
+		axi.post('/api/newActivityToUser',{...data.newActividad,user_id:division.user.id})
 			.then(r=>{
 				setData({...data,newActividad:{actividad:''}})
 				setDivision({...division,user:{...division.user,actividades:[...division.user.actividades,r.data]}})

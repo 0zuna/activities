@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-//import parseMs from 'parse-ms';
-import useCountdown from 'react-use-countdown';
+import useCountdown from 'react-use-countdown'
 
 const _hora=(time)=>{
 	var hours = Math.floor( time / 3600 );
@@ -20,7 +19,7 @@ const Actividad = ({actividad}) => {
 	const countdown = _hora(useCountdown(() =>ff)/1000);
 
 	const _styleActivity = () => {
-		if(countdown=='0:00:00'){
+		if(countdown==='0:00:00'){
 			return {
 				border: '1px solid red',
 				boxShadow: '10px 10px 5px red',
@@ -60,9 +59,11 @@ const Actividad = ({actividad}) => {
 			</div>
 			</div>
 			</div>
+			{!hecha&&
 			<div className="card-action">
 				<a onClick={_hecho} className="waves-effect waves-light btn grey modal-trigger">HECHO</a>
 			</div>
+			}
 		</div>
 	)
 }

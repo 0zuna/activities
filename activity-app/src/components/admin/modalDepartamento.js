@@ -12,7 +12,7 @@ const Departamento = ({departamento,setDepartamento}) =>{
 	})
 	
 	const _assignDep=(user)=>{
-		axi.post('/api/auth/jefe_dep',{departamento_id:departamento.id,user_id:user.id})
+		axi.post('/api/jefe_dep',{departamento_id:departamento.id,user_id:user.id})
 			.then((r)=>{
 				setDepartamento({...departamento,user})
 			})
@@ -20,7 +20,7 @@ const Departamento = ({departamento,setDepartamento}) =>{
 	}
 	const _newActivity=(e)=>{
 		if(e.key=='Enter'){
-		axi.post('/api/auth/newActivityToUser',{...data.newActividad,user_id:departamento.user.id})
+		axi.post('/api/newActivityToUser',{...data.newActividad,user_id:departamento.user.id})
 			.then(r=>{
 				setData({...data,newActividad:{actividad:''}})
 				setDepartamento({...departamento,user:{...departamento.user,actividades:[...departamento.user.actividades,r.data]}})

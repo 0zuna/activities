@@ -11,7 +11,7 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 	},[data])
 	const _newSub=(e)=>{
 		if(e.key=='Enter'){
-			axi.post('/api/auth/newSubActivity',{actividad_id:data.actividad.id,subactividad:data.newSubActividad})
+			axi.post('/api/newSubActivity',{actividad_id:data.actividad.id,subactividad:data.newSubActividad})
 			.then(r=>{
 				setData({...data,actividad:{...data.actividad,sub_actividades:[...data.actividad.sub_actividades,r.data]}})
 				console.log(r.data)
@@ -19,7 +19,7 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 		}
 	}
 	const _updateActivity=()=>{
-		axi.put('/api/auth/updateActivity',data.actividad)
+		axi.put('/api/updateActivity',data.actividad)
 		.then(r=>{
 			const acto=unidad.actividades.map(a=>{
 				if(a.id==data.actividad.id)

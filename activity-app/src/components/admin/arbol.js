@@ -16,7 +16,7 @@ const Arbol=()=>{
 		M.AutoInit();
 		const AUTH_TOKEN = localStorage.getItem('access_token');
 		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-		axi.get('/api/auth/data').then(r=>{
+		axi.get('/api/data').then(r=>{
 			setArbol(r.data)
 
 		}).catch(r=>alert('se ha producido un error'))
@@ -24,7 +24,7 @@ const Arbol=()=>{
 	const _departamentoShow=(d)=>{
 		setDepartamento(d)
 		if(d.user)
-		axi.post('/api/auth/actividad_user',{user_id:d.user.id})
+		axi.post('/api/actividad_user',{user_id:d.user.id})
 			.then((r)=>{
 				setDepartamento({...d,user:{...d.user,actividades:r.data}})
 			})
@@ -33,7 +33,7 @@ const Arbol=()=>{
 	const _divisionShow=(d)=>{
 		setDivision(d)
 		if(d.user)
-		axi.post('/api/auth/actividad_user',{user_id:d.user.id})
+		axi.post('/api/actividad_user',{user_id:d.user.id})
 			.then((r)=>{
 				setDivision({...d,user:{...d.user,actividades:r.data}})
 			})

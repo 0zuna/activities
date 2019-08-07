@@ -14,7 +14,7 @@ const Dashboard = () => {
 		M.AutoInit();
 		const AUTH_TOKEN = localStorage.getItem('access_token');
 		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-		axi.post('/api/auth/actividad_user',{user_id:user.id})
+		axi.post('/api/actividad_user',{user_id:user.id})
 		.then(r=>{
 			setMisActividades(r.data)
 			console.log(r.data)
@@ -47,7 +47,7 @@ const Dashboard = () => {
 					<div className="card-panel">
 						<h2 className="center">HOY</h2>
 						{misActividades.map(a=>
-							<Actividad actividad={a} />
+							<Actividad key={a.id} actividad={a} />
 						)}
 					</div>
 				</div>

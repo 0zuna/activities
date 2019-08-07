@@ -16,7 +16,7 @@ const Jerarquia = ({actividad}) =>{
 		load()
 		if(actividad.users){
 		setItems([actividad])
-		axi.post('/api/auth/actividadJerarquia',{act_referencia:actividad.id})
+		axi.post('/api/actividadJerarquia',{act_referencia:actividad.id})
 		.then(r=>{
 			r.data.length>0&&setItems(r.data)
 		})
@@ -63,7 +63,7 @@ const Jerarquia = ({actividad}) =>{
 		);
 		setItems(ite);
 		console.log(ite);
-		axi.put('/api/auth/updateJerarquia',{actividad_id:actividad.id,actividades:ite})
+		axi.put('/api/updateJerarquia',{actividad_id:actividad.id,actividades:ite})
 		.then(r=>console.log(r.data))
 		.catch(r=>alert(r))
 	}
@@ -71,13 +71,13 @@ const Jerarquia = ({actividad}) =>{
 		const ite=[...items,acti]
 		console.log(ite)
 		setItems(ite)
-		axi.post('/api/auth/pushJerarquia',{act_referencia:acti.id,actividad_id:actividad.id})
+		axi.post('/api/pushJerarquia',{act_referencia:acti.id,actividad_id:actividad.id})
 		//.then(r=>console.log(r))
 		.catch(r=>alert(r))
 	}
 	const _deleteFase=(f)=>{
 		const fases=items.filter(fa=>f.id!==fa.id)
-		axi.post('/api/auth/deleteJerarquia',{act_referencia:f.id,actividad_id:actividad.id})
+		axi.post('/api/deleteJerarquia',{act_referencia:f.id,actividad_id:actividad.id})
 		.then(r=>{
 			setItems(fases)
 		})

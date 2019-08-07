@@ -11,7 +11,7 @@ const AssignJerarquia=({assign})=>{
 	useEffect(()=>{
 		const AUTH_TOKEN = localStorage.getItem('access_token');
 		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-		axi.get('/api/auth/users').then(r=>{
+		axi.get('/api/users').then(r=>{
 			setUsers(r.data)
 		}).catch(r=>alert('se ha producido un error'))
 
