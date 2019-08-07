@@ -23,4 +23,8 @@ class Actividad extends Model
 	{
 		return $this->hasMany('App\Jerarquia');
 	}
+	public function confirmacions()
+	{
+		return $this->hasMany('App\Confirmacion');
+	}
 }

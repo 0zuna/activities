@@ -2,7 +2,7 @@ import React,{ useState, useContext, useEffect } from 'react'
 import { axi } from '../../config'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { UserContext } from '../../UserContext';
-import Dashboard from '../dashboard'
+import Dashboard from '../user/dashboard'
 
 
 const Login=props=>{
@@ -23,7 +23,7 @@ const Login=props=>{
 	},[])
 
 	const _logan=()=>{
-		axi.post('/api/auth/login',data).then(r=>{
+		axi.post('/api/login',data).then(r=>{
 			setUser(r.data)
 			localStorage.setItem('access_token', r.data.access_token);
 			axi.defaults.headers.common['Authorization'] = 'Bearer '+r.data.access_token
