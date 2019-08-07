@@ -19,7 +19,7 @@ class CreateActividadsTable extends Migration
             $table->string('descripcion')->nullable();
             $table->date('fecha')->nullable();
             $table->time('hora')->nullable();
-	    $table->timestamp('confirmacion')->nullable();
+            $table->string('periodicidad')->default('unica');
             $table->boolean('reporte')->default(false);
 	    $table->unsignedBigInteger('unidad_id')->nullable();
 	    $table->foreign('unidad_id')->references('id')->on('unidads')->onDelete('cascade');
