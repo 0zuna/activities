@@ -14,7 +14,7 @@ const Dashboard = () => {
 		M.AutoInit();
 		const AUTH_TOKEN = localStorage.getItem('access_token');
 		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-		axi.post('/api/actividad_user',{user_id:user.id})
+		axi.post('/api/misActividadesHoy',{user_id:user.id})
 		.then(r=>{
 			setMisActividades(r.data)
 			console.log(r.data)
@@ -28,9 +28,9 @@ const Dashboard = () => {
 					<li>
 						<div className="user-view">
 							<div className="background">
-								<img src="http://lorempixel.com/400/200/sports/"/>
+								<img src="http://dimitri/usupso/activities/activity/public/assets/img/usupso_store.jpeg" style={{width:400}}/>
 							</div>
-							<a href="#user"><img className="circle" src="http://lorempixel.com/400/200/sports/"/></a>
+							<a href="#user"><img className="circle" src="http://dimitri/usupso/activities/activity/public/assets/img/logo.jpeg"/></a>
 							<a href="#name"><span className="white-text name">{user.name}</span></a>
 							<a href="#email"><span className="white-text email">{user.email}</span></a>
 						</div>
@@ -43,14 +43,12 @@ const Dashboard = () => {
 				<a href="#" data-target="slide-out" className="sidenav-trigger"><i className="material-icons">menu</i></a>
 			</div>
 			<div className="col s12 m8 l9">
-				<div className="col s12 m12">
 					<div className="card-panel">
 						<h2 className="center">HOY</h2>
 						{misActividades.map(a=>
 							<Actividad key={a.id} actividad={a} />
 						)}
 					</div>
-				</div>
 			</div>
 		</div>
 	)

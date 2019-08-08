@@ -16,8 +16,15 @@ class UsersTableSeeder extends Seeder
     {
         //
 	$user=new App\User();
-	$user->name='Erik';
-	$user->email='erik@gmail.com';
+	$user->name='Erik Admin';
+	$user->email='admin@usupso.com';
+	$user->rol='admin';
+        $user->password= bcrypt('1');
+	$user->save();
+	$user=new App\User();
+	$user->name='Erik Empleado';
+	$user->email='empleado@usupso.com';
+	$user->rol='empleado';
         $user->password= bcrypt('1');
 	$user->save();
 	factory(App\User::class,100)->create();

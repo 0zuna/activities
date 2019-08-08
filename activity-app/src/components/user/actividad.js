@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import useCountdown from 'react-use-countdown'
+import { axi } from '../../config';
+import { UserContext } from '../../UserContext';
 
 const _hora=(time)=>{
 	var hours = Math.floor( time / 3600 );
@@ -11,12 +13,21 @@ const _hora=(time)=>{
 }
 
 const Actividad = ({actividad}) => {
+	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
 	const [hecha, setHecha]=useState(false)
 	var ff=new Date()
 	ff.setHours(actividad.hora.split(':')[0])
 	ff.setMinutes(actividad.hora.split(':')[1])
 	ff.setSeconds(actividad.hora.split(':')[2])
 	const countdown = _hora(useCountdown(() =>ff)/1000);
+
+	useEffect(()=>{
+		const AUTH_TOKEN = localStorage.getItem('access_token');
+		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
+		actividad.confirmacions.map(c=>{
+
+		})
+	})
 
 	const _styleActivity = () => {
 		if(countdown==='0:00:00'){
@@ -41,7 +52,9 @@ const Actividad = ({actividad}) => {
 	}
 
 	const _hecho = () =>{
-		console.log(actividad)
+		axi.post('/api/activityDone',{actividad_id:actividad.id,user_id:user.id})
+		.then(r=>console.log(r.data))
+		.catch(r=>alert(r))
 		setHecha(true)
 	}
 
