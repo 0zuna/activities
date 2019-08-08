@@ -16,6 +16,9 @@ Route::post('login', 'AuthController@login');
 Route::post('signup', 'AuthController@signup');
 
 Route::group(['middleware' => 'auth:api'], function() {
+	/*
+	 *    ADMIN
+	 */
 	Route::get('logout', 'AuthController@logout');
 	Route::post('upexcel', 'ExcelController@index');
 	Route::get('data', 'AdminController@index');
@@ -33,4 +36,10 @@ Route::group(['middleware' => 'auth:api'], function() {
 	Route::put('updateJerarquia', 'AdminController@updateJerarquia');
 	Route::post('actividadJerarquia', 'AdminController@actividadJerarquia');
 	Route::post('deleteJerarquia', 'AdminController@deleteJerarquia');
+	/*
+	 *    EMPLEADO
+	 */
+	Route::post('misActividades','EmpleadoController@misActividades');
+	Route::post('misActividadesHoy','EmpleadoController@misActividadesHoy');
+	Route::post('activityDone','EmpleadoController@activityDone');
 });
