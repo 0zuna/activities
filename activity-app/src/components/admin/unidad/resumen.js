@@ -19,6 +19,7 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 		}
 	}
 	const _updateActivity=()=>{
+		console.log(data.actividad)
 		axi.put('/api/updateActivity',data.actividad)
 		.then(r=>{
 			const acto=unidad.actividades.map(a=>{
@@ -41,19 +42,34 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 					<span className="badge yellow white-text">{'En Proceso'}</span>
 				</div>
 				<div className="input-field col s12">
-					<select value={data.actividad.periodicidad||''} onChange={e=>setData({...data,actividad:{...data.actividad,periodicidad:e.target.value}})}>
+					<select value={data.actividad.tipo||''} onChange={e=>setData({...data,actividad:{...data.actividad,tipo:e.target.value}})}>
 						<option value="" disabled>Periodicidad</option>
 						<option value="unica">Unica</option>
+						<option value="diaria">Diaria</option>
 						<option value="semanal">Semanal</option>
 						<option value="mensual">Mensual</option>
 					</select>
 					<label>Periodicidad</label>
 				</div>
 				<div className="row">
-				{data.actividad.periodicidad=='unica'&&
+				{data.actividad.tipo=='unica'&&
 					<div className="col s6">
 						<label htmlFor="date">Entrega</label>
 						<input onChange={e=>setData({...data,actividad:{...data.actividad,fecha:e.target.value}})} value={data.actividad.fecha||''} id="date" type="text" className="datepicker" placeholder="fecha"/>
+					</div>
+				}
+				{(data.actividad.tipo=='semanal'||data.actividad.tipo=='mensual')&&
+					<div className="col s6">
+					<label htmlFor='dia'>Día</label>
+					<select id='dia' value={data.actividad.periodicidad?data.actividad.periodicidad.dia:''} onChange={e=>setData({...data,actividad:{...data.actividad,periodicidad:{dia:e.target.value},periodicidadDia:e.target.value}})}>
+						<option value="" disabled>Día</option>
+						<option value="lunes">Lunes</option>
+						<option value="martes">Martes</option>
+						<option value="miercoles">Miercoles</option>
+						<option value="jueves">Jueves</option>
+						<option value="viernes">Viernes</option>
+						<option value="sabado">Sabado</option>
+					</select>
 					</div>
 				}
 					<div className="col s6">

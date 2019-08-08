@@ -10,6 +10,7 @@ use App\Actividad;
 use App\Mail\NotifyMail;
 use App\SubActividad;
 use App\Jerarquia;
+use App\Periodicidad;
 
 
 class AdminController extends Controller
@@ -19,7 +20,7 @@ class AdminController extends Controller
 		$depa=Departamento::with(['divisions'=>function($q){
 			$q->with(['unidads'=>function($q){
 				$q->with(['actividades'=>function($q){
-						$q->with(['subActividades','users']);
+						$q->with(['subActividades','users','periodicidad']);
 					}]);
 			}]);
 		}])->get();
@@ -65,9 +66,28 @@ class AdminController extends Controller
 		$act=Actividad::find($request->id);
 		$act->descripcion=$request->descripcion;
 		$act->fecha=$request->fecha;
-		$act->periodicidad=$request->periodicidad;
+		$act->tipo=$request->tipo;
 		$act->hora=$request->hora;
 		$act->update();
+		if($request->tipo=='diaria'||$request->tipo=='unica'){
+			$periodicidad=Periodicidad::where('actividad_id',$act->id)->first();
+			$periodicidad->delete();
+		}
+		if($request->tipo=='semanal'||$request->tipo=='mensual'){
+			$periodicidad=Periodicidad::where('actividad_id',$act->id)->first();
+			if(!empty($periodicidad)){
+				$periodicidad->tipo=$request->tipo;
+				$periodicidad->dia=$request->periodicidadDia;
+				$periodicidad->update();
+			}
+			else{
+				$periodicidad=new Periodicidad();
+				$periodicidad->actividad_id=$act->id;
+				$periodicidad->tipo=$request->tipo;
+				$periodicidad->dia=$request->periodicidadDia;
+				$periodicidad->save();
+			}
+		}
 		return response()->json($act);
 	}
 	public function newSubActivity(Request $request)

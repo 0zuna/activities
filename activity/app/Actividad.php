@@ -27,4 +27,8 @@ class Actividad extends Model
 	{
 		return $this->hasMany('App\Confirmacion');
 	}
+	public function periodicidad()
+	{
+		return $this->hasOne('App\Periodicidad');
+	}
 }
