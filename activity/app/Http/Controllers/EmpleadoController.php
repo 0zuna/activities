@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Confirmacion;
+use Carbon\Carbon;
 
 class EmpleadoController extends Controller
 {
@@ -18,14 +19,24 @@ class EmpleadoController extends Controller
 	}
 	public function misActividadesHoy(Request $request)
 	{
-		$actividades=User::find($request->user_id)
-			->actividades()
-			->where('fecha',date('Y-m-d'))
-			->with(['confirmacions'])
+		//return date('l');
+		$dia=Carbon::now()->locale('es')->dayName;
+		$user=User::find($request->user_id);
+		$actividades=$user->actividades()
+			->with(['periodicidad','confirmacions'=>function($q){
+				$q->where('fecha',date('Y-m-d'));
+			}])
 			->get();
-		/*foreach ($actividades as $k=>$v) {
-			return response()->json($v);
-		}*/
+		return$actividades->filter(function ($a) {
+			if($a->tipo=='semanal'){
+				return $a->periodicidad->dia==Carbon::now()->locale('es')->dayName;
+			}
+			if($a->tipo=='mensual'){
+				return $a->periodicidad->dia==Carbon::now()->locale('es')->dayName&&Carbon::now()->day<7;
+			}
+			return $a->fecha==date('Y-m-d')||$a->tipo=='diaria';
+		})->values()->all();
+
 		return response()->json($actividades);
 	}
 	public function activityDone(Request $request)
@@ -36,6 +47,6 @@ class EmpleadoController extends Controller
 		$confirmacion->fecha=date("Y-m-d");
 		$confirmacion->hora=date("H:i:s");
 		$confirmacion->save();
-		return response()->json($request);
+		return response()->json($confirmacion);
 	}
 }
