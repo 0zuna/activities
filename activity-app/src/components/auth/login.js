@@ -25,7 +25,7 @@ const Login=props=>{
 
 	const _logan=()=>{
 		axi.post('/api/login',data).then(r=>{
-			setUser(r.data)
+			setUser(r.data.user)
 			localStorage.setItem('access_token', r.data.access_token);
 			axi.defaults.headers.common['Authorization'] = 'Bearer '+r.data.access_token
 			setAuth(true)

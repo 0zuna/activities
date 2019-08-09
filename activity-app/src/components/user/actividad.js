@@ -12,22 +12,28 @@ const _hora=(time)=>{
 	return hours + ":" + minutes + ":" + seconds
 }
 
-const Actividad = ({actividad}) => {
+const Actividad = ({actividad, _updateConfirmacion }) => {
 	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
 	const [hecha, setHecha]=useState(false)
 	var ff=new Date()
-	ff.setHours(actividad.hora.split(':')[0])
-	ff.setMinutes(actividad.hora.split(':')[1])
-	ff.setSeconds(actividad.hora.split(':')[2])
+	if(actividad.hora){
+		ff.setHours(actividad.hora.split(':')[0])
+		ff.setMinutes(actividad.hora.split(':')[1])
+		ff.setSeconds(actividad.hora.split(':')[2])
+	}else{
+		ff.setHours(18)
+		ff.setMinutes(0)
+		ff.setSeconds(0)
+	}
 	const countdown = _hora(useCountdown(() =>ff)/1000);
 
 	useEffect(()=>{
 		const AUTH_TOKEN = localStorage.getItem('access_token');
 		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-		actividad.confirmacions.map(c=>{
-
-		})
-	})
+		console.log(actividad)
+		if(actividad.confirmacions.length>0)
+			setHecha(true)
+	},[actividad])
 
 	const _styleActivity = () => {
 		if(countdown==='0:00:00'){
@@ -53,9 +59,12 @@ const Actividad = ({actividad}) => {
 
 	const _hecho = () =>{
 		axi.post('/api/activityDone',{actividad_id:actividad.id,user_id:user.id})
-		.then(r=>console.log(r.data))
+		.then(r=>{
+			console.log(r.data)
+			_updateConfirmacion({actividad_id:actividad.id,confirmacions:r.data})
+			setHecha(true)
+		})
 		.catch(r=>alert(r))
-		setHecha(true)
 	}
 
 	return (
@@ -64,11 +73,19 @@ const Actividad = ({actividad}) => {
 			<div className="row">
 			<div className="col s9">
 				<div className="card-title">{actividad.actividad}</div>
-				<p>Descripcion: {actividad.descripcion}</p>
+				<p>Descripción: {actividad.descripcion}</p>
 				<p>Hora de entrega: {actividad.hora}</p>
 			</div>
 			<div className="col s3">
+				{hecha&&
+					<div className="row">
+						<div>{actividad.confirmacions[0].fecha} {actividad.confirmacions[0].hora}
+							<i className="large material-icons right" style={{color: 'green'}}>check</i>
+						</div>
+					</div>
+				}{!hecha&&
 				<h4>{countdown}</h4>
+				}
 			</div>
 			</div>
 			</div>

@@ -17,10 +17,21 @@ const Dashboard = () => {
 		axi.post('/api/misActividadesHoy',{user_id:user.id})
 		.then(r=>{
 			setMisActividades(r.data)
-			console.log(r.data)
 		})
 		.catch(r=>alert(r))
 	},[])
+	
+	const _updateConfirmacion=(data)=>{
+		const update=misActividades.map(a=>{
+			if(a.id==data.actividad_id){
+				a={...a,confirmacions:[data.confirmacions]}
+			}
+			return a
+		})
+		console.log(update)
+		setMisActividades(update)
+		console.log(data.actividad_id)
+	}
 	return (
 		<div className="row">
 			<div className="col s12 m4 l3" style={{width: '300px'}}>
@@ -44,9 +55,9 @@ const Dashboard = () => {
 			</div>
 			<div className="col s12 m8 l9">
 					<div className="card-panel">
-						<h2 className="center">HOY</h2>
+						<h2 className="center">MIS ACTIVIDADES DEL DÍA</h2>
 						{misActividades.map(a=>
-							<Actividad key={a.id} actividad={a} />
+							<Actividad key={a.id} actividad={a} _updateConfirmacion={_updateConfirmacion}/>
 						)}
 					</div>
 			</div>
