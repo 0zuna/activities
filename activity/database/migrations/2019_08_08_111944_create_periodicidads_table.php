@@ -18,6 +18,7 @@ class CreatePeriodicidadsTable extends Migration
 	    $table->unsignedBigInteger('actividad_id')->nullable();
 	    $table->string('tipo');
 	    $table->string('dia');
+	    $table->boolean('hecho')->default(true);
 	    $table->foreign('actividad_id')->references('id')->on('actividads')->onDelete('cascade');
             $table->timestamps();
         });

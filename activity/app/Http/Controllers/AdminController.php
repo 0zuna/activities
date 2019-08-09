@@ -71,7 +71,8 @@ class AdminController extends Controller
 		$act->update();
 		if($request->tipo=='diaria'||$request->tipo=='unica'){
 			$periodicidad=Periodicidad::where('actividad_id',$act->id)->first();
-			$periodicidad->delete();
+			if(!empty($periodicidad))
+				$periodicidad->delete();
 		}
 		if($request->tipo=='semanal'||$request->tipo=='mensual'){
 			$periodicidad=Periodicidad::where('actividad_id',$act->id)->first();
