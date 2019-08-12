@@ -10,7 +10,7 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 		M.FormSelect.init(elems, {});
 	},[data])
 	const _newSub=(e)=>{
-		if(e.key=='Enter'){
+		if(e.key==='Enter'){
 			axi.post('/api/newSubActivity',{actividad_id:data.actividad.id,subactividad:data.newSubActividad})
 			.then(r=>{
 				setData({...data,actividad:{...data.actividad,sub_actividades:[...data.actividad.sub_actividades,r.data]}})
@@ -23,7 +23,7 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 		axi.put('/api/updateActivity',data.actividad)
 		.then(r=>{
 			const acto=unidad.actividades.map(a=>{
-				if(a.id==data.actividad.id)
+				if(a.id===data.actividad.id)
 					return data.actividad
 				return a
 			})

@@ -20,7 +20,7 @@ class AuthController extends Controller
         ]);
         $user->save();
         return response()->json([
-            'message' => 'Successfully created user!'], 201);
+            'message' => 'Usuario creado!'], 201);
     }
     public function login(Request $request)
     {
@@ -32,7 +32,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'message' => 'Unauthorized'], 401);
+                'message' => 'No autorizado :('], 401);
         }
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');

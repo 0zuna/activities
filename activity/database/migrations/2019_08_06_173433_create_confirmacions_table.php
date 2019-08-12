@@ -21,6 +21,7 @@ class CreateConfirmacionsTable extends Migration
 	    $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->date('fecha')->nullable();
             $table->time('hora')->nullable();
+            $table->boolean('realizada')->default(true);
             $table->timestamps();
         });
     }

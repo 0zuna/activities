@@ -36,6 +36,12 @@ const Actividad = ({actividad, _updateConfirmacion }) => {
 	},[actividad])
 
 	const _styleActivity = () => {
+		if(actividad.confirmacions[0]&&actividad.confirmacions[0].hora<actividad.hora)
+			return {
+				border: '1px solid #8AE234',
+				boxShadow: '10px 10px 5px #8AE234',
+				color:'#636b6f',
+			}
 		if(countdown==='0:00:00'){
 			return {
 				border: '1px solid red',

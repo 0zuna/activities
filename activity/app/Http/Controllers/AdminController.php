@@ -124,7 +124,6 @@ class AdminController extends Controller
 		$actividad=new Actividad();
 		$actividad->unidad_id=$request->unidad_id;
 		$actividad->actividad=$request->actividad;
-		$actividad->status='En Proceso';
 		$actividad->save();
 		$actividad->users=[];
 		return response()->json($actividad);
