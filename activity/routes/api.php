@@ -42,4 +42,5 @@ Route::group(['middleware' => 'auth:api'], function() {
 	Route::post('misActividades','EmpleadoController@misActividades');
 	Route::post('misActividadesHoy','EmpleadoController@misActividadesHoy');
 	Route::post('activityDone','EmpleadoController@activityDone');
+	Route::get('activitiesDone','EmpleadoController@activitiesDone');
 });
