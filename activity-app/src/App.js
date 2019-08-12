@@ -13,10 +13,8 @@ const App=()=>{
 	return (
 		<UserProvider>
 		<Router>
-			<div>
-				<Route path="/" exact component={Login} />
-				<Route path="/create/" component={Create} />
-			</div>
+			<Route path="/" component={Login} />
+			<Route path="/create/" component={Create} />
 		</Router>
 		</UserProvider>
 	);
