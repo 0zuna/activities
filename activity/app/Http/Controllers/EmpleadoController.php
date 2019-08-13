@@ -28,6 +28,7 @@ class EmpleadoController extends Controller
 				$q->where('fecha',date('Y-m-d'));
 			}])
 			->get();
+
 		return $actividades->filter(function ($a) {
 			if($a->tipo=='semanal'){
 				return $a->periodicidad->dia==Carbon::now()->locale('es')->dayName;
@@ -53,13 +54,14 @@ class EmpleadoController extends Controller
 	public function activitiesDone(Request $request)
 	{
 		$actividades=Actividad::join('confirmacions','actividads.id','confirmacions.actividad_id')
-			->select('*','actividads.hora as horaSolicitada','confirmacions.hora as horaEntregada','actividads.fecha as fechaSolicitada','confirmacions.fecha as fechaEntregada','confirmacions.created_at as fechaConfirmacion')
+			->leftJoin('periodicidads','actividads.id','periodicidads.actividad_id')
+			->select('actividads.*','periodicidads.dia','actividads.hora as horaSolicitada','confirmacions.hora as horaEntregada','actividads.fecha as fechaSolicitada','confirmacions.fecha as fechaEntregada','confirmacions.created_at as fechaConfirmacion')
 			->where('confirmacions.user_id',$request->user()->id)
 			->where('confirmacions.realizada',1)
 			//->with(['periodicidad'])
 			->get();
 		foreach ($actividades as $k=>$v){
-			if($v->tipo!=='unica'||$v->tipo!=='diaria'){
+			if($v->tipo=='diaria'||$v->tipo=='semanal'||$v->tipo=='mensual'){
 				$solicitada=Carbon::createFromFormat('Y-m-d H:i:s', $v->fechaConfirmacion);
 				$entregada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaEntregada);
 				if($entregada<$solicitada){
@@ -68,7 +70,8 @@ class EmpleadoController extends Controller
 					$actividades[$k]->entregadaATiempo=false;
 				}
 				
-			}else{
+			}
+			if($v->tipo=='unica'){
 				$solicitada=Carbon::createFromFormat('Y-m-d H:i:s', $v->fechaSolicitada.' '.$v->horaSolicitada);
 				$entregada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaEntregada);
 				if($entregada<$solicitada){
