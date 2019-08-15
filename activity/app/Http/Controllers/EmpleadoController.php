@@ -7,6 +7,7 @@ use App\User;
 use App\Confirmacion;
 use Carbon\Carbon;
 use App\Actividad;
+use App\File;
 
 class EmpleadoController extends Controller
 {
@@ -24,9 +25,15 @@ class EmpleadoController extends Controller
 		$dia=Carbon::now()->locale('es')->dayName;
 		$user=User::find($request->user_id);
 		$actividades=$user->actividades()
-			->with(['periodicidad','confirmacions'=>function($q){
-				$q->where('fecha',date('Y-m-d'));
-			}])
+			->with([
+				'periodicidad',
+				'files'=>function($q){
+					$q->where('fecha',date('Y-m-d'));
+				},
+				'confirmacions'=>function($q){
+					$q->where('fecha',date('Y-m-d'));
+				}
+			])
 			->get();
 
 		return $actividades->filter(function ($a) {
@@ -58,18 +65,30 @@ class EmpleadoController extends Controller
 			->select('actividads.*','periodicidads.dia','actividads.hora as horaSolicitada','confirmacions.hora as horaEntregada','actividads.fecha as fechaSolicitada','confirmacions.fecha as fechaEntregada','confirmacions.created_at as fechaConfirmacion')
 			->where('confirmacions.user_id',$request->user()->id)
 			->where('confirmacions.realizada',1)
+			->orderBy('confirmacions.fecha','desc')
 			//->with(['periodicidad'])
 			->get();
 		foreach ($actividades as $k=>$v){
-			if($v->tipo=='diaria'||$v->tipo=='semanal'||$v->tipo=='mensual'){
+			if($v->tipo=='semanal'||$v->tipo=='mensual'){
 				$solicitada=Carbon::createFromFormat('Y-m-d H:i:s', $v->fechaConfirmacion);
 				$entregada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaEntregada);
-				if($entregada<$solicitada){
+				$horaSolicitada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaSolicitada);
+				if($entregada<=$solicitada&&$entregada<$horaSolicitada){
 					$actividades[$k]->entregadaATiempo=true;
 				}else{
 					$actividades[$k]->entregadaATiempo=false;
 				}
 				
+			}
+			if($v->tipo=='diaria'){
+				$solicitada=Carbon::createFromFormat('Y-m-d H:i:s', $v->fechaConfirmacion);
+				$entregada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaEntregada);
+				$horaSolicitada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaSolicitada);
+				if($solicitada==$entregada&&$entregada<$horaSolicitada){
+					$actividades[$k]->entregadaATiempo=true;
+				}else{
+					$actividades[$k]->entregadaATiempo=false;
+				}
 			}
 			if($v->tipo=='unica'){
 				$solicitada=Carbon::createFromFormat('Y-m-d H:i:s', $v->fechaSolicitada.' '.$v->horaSolicitada);
@@ -82,5 +101,23 @@ class EmpleadoController extends Controller
 			}
 		}
 		return response()->json($actividades);
+	}
+	public function fileUpload(Request $request){
+		$path = storage_path().'/File/'.$request->actividad_id."/";
+		$name = Carbon::now()."_".$request->name;
+		if(!\File::exists($path)) {
+			\File::makeDirectory($path, $mode = 0777, true, true);
+		}
+		file_put_contents($path.$name, base64_decode(explode(',',$request->data)[1]));
+		$file=new File();
+		$file->name='/File/'.$request->actividad_id."/".$name;
+		$file->fecha=date('Y-m-d');
+		$file->actividad_id=$request->actividad_id;
+		$file->save();
+		return response()->json($file);
+	}
+	public function deleteFileUpload($id){
+		File::destroy($id);
+		return response()->json(null, 204);
 	}
 }

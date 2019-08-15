@@ -31,4 +31,8 @@ class Actividad extends Model
 	{
 		return $this->hasOne('App\Periodicidad');
 	}
+	public function files()
+	{
+		return $this->hasMany('App\File');
+	}
 }
