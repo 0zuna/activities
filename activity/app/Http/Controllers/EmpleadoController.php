@@ -120,4 +120,59 @@ class EmpleadoController extends Controller
 		File::destroy($id);
 		return response()->json(null, 204);
 	}
+	public function activitiesForget(Request $request)
+	{
+		$actividades=Actividad::join('confirmacions','actividads.id','confirmacions.actividad_id')
+			->leftJoin('periodicidads','actividads.id','periodicidads.actividad_id')
+			->select('actividads.*','periodicidads.dia','actividads.hora as horaSolicitada','confirmacions.hora as horaEntregada','actividads.fecha as fechaSolicitada','confirmacions.fecha as fechaEntregada','confirmacions.created_at as fechaConfirmacion')
+			->where('confirmacions.user_id',$request->user()->id)
+			->where('confirmacions.realizada',0)
+			->orderBy('confirmacions.fecha','desc')
+			//->with(['periodicidad'])
+			->get();
+		foreach ($actividades as $k=>$v){
+			if($v->tipo=='semanal'||$v->tipo=='mensual'){
+				$solicitada=Carbon::createFromFormat('Y-m-d H:i:s', $v->fechaConfirmacion);
+				$entregada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaEntregada);
+				$horaSolicitada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaSolicitada);
+				if($entregada<=$solicitada&&$entregada<$horaSolicitada){
+					$actividades[$k]->entregadaATiempo=true;
+				}else{
+					$actividades[$k]->entregadaATiempo=false;
+				}
+				
+			}
+			if($v->tipo=='diaria'){
+				$solicitada=Carbon::createFromFormat('Y-m-d H:i:s', $v->fechaConfirmacion);
+				$entregada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaEntregada);
+				$horaSolicitada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaSolicitada);
+				if($solicitada==$entregada&&$entregada<$horaSolicitada){
+					$actividades[$k]->entregadaATiempo=true;
+				}else{
+					$actividades[$k]->entregadaATiempo=false;
+				}
+			}
+			if($v->tipo=='unica'){
+				$solicitada=Carbon::createFromFormat('Y-m-d H:i:s', $v->fechaSolicitada.' '.$v->horaSolicitada);
+				$entregada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaEntregada);
+				if($entregada<$solicitada){
+					$actividades[$k]->entregadaATiempo=true;
+				}else{
+					$actividades[$k]->entregadaATiempo=false;
+				}
+			}
+		}
+		return response()->json($actividades);
+	}
+	public function activityForgetDone(Request $request)
+	{
+		$confirmacion=Confirmacion::where('actividad_id',$request->id)
+			->where('created_at',$request->fechaConfirmacion)
+			->first();
+		$confirmacion->fecha=date('Y-m-d');
+		$confirmacion->hora=date('H:i:s');
+		$confirmacion->realizada=true;
+		$confirmacion->update();
+		return response()->json($confirmacion);
+	}
 }
