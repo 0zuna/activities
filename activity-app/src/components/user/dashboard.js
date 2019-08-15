@@ -41,12 +41,21 @@ const Dashboard = () => {
 		setMisActividades(update)
 		console.log(data.actividad_id)
 	}
+	const _updateActivity=(actividad)=>{
+		const update=misActividades.map(a=>{
+			if(a.id==actividad.id){
+				a=actividad
+			}
+			return a
+		})
+		setMisActividades(update)
+	}
 	const actos=()=>{
 		return (
 			<div className="card-panel">
 				<h2 className="center">MIS ACTIVIDADES DEL DÍA</h2>
 				{misActividades.map(a=>
-					<Actividad key={a.id} actividad={a} _updateConfirmacion={_updateConfirmacion}/>
+					<Actividad key={a.id} actividad={a} _updateActivity={_updateActivity} _updateConfirmacion={_updateConfirmacion}/>
 				)}
 			</div>
 		       )
