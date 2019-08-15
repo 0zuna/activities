@@ -12,9 +12,11 @@ const _hora=(time)=>{
 	return hours + ":" + minutes + ":" + seconds
 }
 
-const Actividad = ({actividad, _updateConfirmacion }) => {
+const Actividad = ({actividad, _updateConfirmacion, _updateActivity }) => {
 	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
 	const [hecha, setHecha]=useState(false)
+	const [show, setShow]=useState(false)
+
 	var ff=new Date()
 	if(actividad.hora){
 		ff.setHours(actividad.hora.split(':')[0])
@@ -25,12 +27,12 @@ const Actividad = ({actividad, _updateConfirmacion }) => {
 		ff.setMinutes(0)
 		ff.setSeconds(0)
 	}
+
 	const countdown = _hora(useCountdown(() =>ff)/1000);
 
 	useEffect(()=>{
 		const AUTH_TOKEN = localStorage.getItem('access_token');
 		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-		console.log(actividad)
 		if(actividad.confirmacions.length>0)
 			setHecha(true)
 	},[actividad])
@@ -49,13 +51,13 @@ const Actividad = ({actividad, _updateConfirmacion }) => {
 				color:'#636b6f',
 			}
 		}
-		if(hecha){
+		/*if(hecha){
 			return {
 				border: '1px solid #8AE234',
 				boxShadow: '10px 10px 5px #8AE234',
 				color:'#636b6f',
 			}
-		}
+		}*/
 		return {
 			border: '1px solid yellow',
 			boxShadow: '10px 10px 5px yellow',
@@ -66,9 +68,33 @@ const Actividad = ({actividad, _updateConfirmacion }) => {
 	const _hecho = () =>{
 		axi.post('/api/activityDone',{actividad_id:actividad.id,user_id:user.id})
 		.then(r=>{
-			console.log(r.data)
 			_updateConfirmacion({actividad_id:actividad.id,confirmacions:r.data})
 			setHecha(true)
+		})
+		.catch(r=>alert(r))
+	}
+
+	const _fileUpload=e=>{
+		const name=e.target.files[0].name
+		var reader = new FileReader();
+		reader.readAsDataURL(e.target.files[0]);
+		reader.onload = () => {
+			axi.post('/api/fileUpload',{actividad_id:actividad.id,data:reader.result,name:name})
+			.then(r=>{
+				actividad={...actividad,files:[...actividad.files,r.data]}
+				_updateActivity(actividad)
+			})
+			.catch(r=>alert(r))
+		}
+	}
+
+	const _deleteFile=(f)=>{
+		console.log(f)
+		actividad.files=actividad.files.filter(a=>f.id!==a.id)
+		axi.delete(`/api/fileUpload/${f.id}`)
+		.then(r=>{
+			console.log(r.data)
+			_updateActivity(actividad)
 		})
 		.catch(r=>alert(r))
 	}
@@ -81,6 +107,19 @@ const Actividad = ({actividad, _updateConfirmacion }) => {
 				<div className="card-title">{actividad.actividad}</div>
 				<p>Descripción: {actividad.descripcion}</p>
 				<p>Hora de entrega: {actividad.hora}</p>
+				<div className="file-field input-field" style={{width:50}}>
+					<i className="material-icons">icloud_upload</i>
+					<input type="file" onChange={(e)=>_fileUpload(e)} />
+					<div className="file-path-wrapper" style={{display:'none'}}>
+						<input className="file-path validate" type="text"/>
+					</div>
+				</div>
+				{actividad.files.map(f=>
+				<p key={f.id}>
+				  <i onClick={()=>_deleteFile(f)} className="material-icons" style={{cursor: 'pointer'}}>delete</i>
+				  <a href={axi.defaults.baseURL+f.name}>{f.name.split('/')[3]}</a>
+				</p>
+				)}
 			</div>
 			<div className="col s3">
 				{hecha&&
