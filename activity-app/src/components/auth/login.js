@@ -1,5 +1,5 @@
 import React,{ useState, useContext, useEffect } from 'react' 
-import { axi } from '../../config'
+import { axios } from '../../config'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { UserContext } from '../../UserContext';
 import Empleado from '../user/dashboard'
@@ -12,9 +12,7 @@ const Login=props=>{
 	const [loader, setLoader]=useState(true)
 	const [log, setLog] = useState(false);
 	useEffect(()=>{
-		const AUTH_TOKEN = localStorage.getItem('access_token');
-		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-		axi.get('/api/user').then(response=>{
+		axios.get('/api/user').then(response=>{
 			setUser(response.data)
 			setLoader(false)
 			setAuth(true)
@@ -24,10 +22,10 @@ const Login=props=>{
 	},[])
 
 	const _logan=()=>{
-		axi.post('/api/login',data).then(r=>{
+		axios.post('/api/login',data).then(r=>{
 			setUser(r.data.user)
-			localStorage.setItem('access_token', r.data.access_token);
-			axi.defaults.headers.common['Authorization'] = 'Bearer '+r.data.access_token
+			localStorage.setItem('access_token', 'Bearer '+r.data.access_token);
+			axios.defaults.headers.common['Authorization'] = 'Bearer '+r.data.access_token
 			setAuth(true)
 			setData({})
 		})

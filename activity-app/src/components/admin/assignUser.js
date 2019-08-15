@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
 //import M from 'materialize-css';
-import { axi } from '../../config'
+import { axios } from '../../config'
 
 const AssignUser=({assign})=>{
 	const [users, setUsers]=useState([])
 	const [search, setSearch]=useState('')
 	useEffect(()=>{
-		const AUTH_TOKEN = localStorage.getItem('access_token');
-		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-		axi.get('/api/users').then(r=>{
+		axios.get('/api/users').then(r=>{
 			setUsers(r.data)
 		}).catch(r=>alert('se ha producido un error'))
 	},[])

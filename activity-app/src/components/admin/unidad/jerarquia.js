@@ -2,21 +2,16 @@ import React,{ useEffect, useContext, useState } from 'react'
 import {UserContext} from '../../../UserContext';
 import AssignJerarquia from './assignJerarquia'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { axi } from '../../../config';
+import { axios } from '../../../config';
 
 
 const Jerarquia = ({actividad}) =>{
 	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
 	const [items,setItems]=useState([])
 	useEffect(()=>{
-		const load=async()=>{
-			const AUTH_TOKEN = localStorage.getItem('access_token');
-			axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-		}
-		load()
 		if(actividad.users){
 		setItems([actividad])
-		axi.post('/api/actividadJerarquia',{act_referencia:actividad.id})
+		axios.post('/api/actividadJerarquia',{act_referencia:actividad.id})
 		.then(r=>{
 			r.data.length>0&&setItems(r.data)
 		})
@@ -63,7 +58,7 @@ const Jerarquia = ({actividad}) =>{
 		);
 		setItems(ite);
 		console.log(ite);
-		axi.put('/api/updateJerarquia',{actividad_id:actividad.id,actividades:ite})
+		axios.put('/api/updateJerarquia',{actividad_id:actividad.id,actividades:ite})
 		.then(r=>console.log(r.data))
 		.catch(r=>alert(r))
 	}
@@ -71,13 +66,13 @@ const Jerarquia = ({actividad}) =>{
 		const ite=[...items,acti]
 		console.log(ite)
 		setItems(ite)
-		axi.post('/api/pushJerarquia',{act_referencia:acti.id,actividad_id:actividad.id})
+		axios.post('/api/pushJerarquia',{act_referencia:acti.id,actividad_id:actividad.id})
 		//.then(r=>console.log(r))
 		.catch(r=>alert(r))
 	}
 	const _deleteFase=(f)=>{
 		const fases=items.filter(fa=>f.id!==fa.id)
-		axi.post('/api/deleteJerarquia',{act_referencia:f.id,actividad_id:actividad.id})
+		axios.post('/api/deleteJerarquia',{act_referencia:f.id,actividad_id:actividad.id})
 		.then(r=>{
 			setItems(fases)
 		})

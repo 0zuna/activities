@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import AssignUser from '../assignUser'
 import M from 'materialize-css';
-import { axi } from '../../../config';
+import { axios } from '../../../config';
 import Jerarquia from './jerarquia'
 import Resumen from './resumen'
 //import $ from 'jquery'
@@ -13,8 +13,6 @@ const Unidad = ({unidad,setUnidad}) =>{
 	const [data, setData]=useState({actividad:{ sub_actividades:[] }})
 	const [search, setSearch]=useState({})
 	useEffect(()=>{
-		const AUTH_TOKEN = localStorage.getItem('access_token');
-		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
 		//fecha
 		var elem = document.querySelector('#date');
 		M.Datepicker.init(elem, {format:'yyyy-mm-dd',autoClose:false,i18n:{
@@ -48,14 +46,14 @@ const Unidad = ({unidad,setUnidad}) =>{
 	}
 	const _assignActivity=(u)=>{
 		//console.log({...data,data.actividad.users})
-		axi.post('/api/assignActivity',{user_id:u.id,actividad_id:data.actividad.id})
+		axios.post('/api/assignActivity',{user_id:u.id,actividad_id:data.actividad.id})
 		.then(r=>{
 			setData({...data,actividad:{...data.actividad,users:[...data.actividad.users,u]}})
 		})
 		.catch(r=>alert(r))
 	}
 	const _unassigned=(u)=>{
-		axi.post('/api/unAssignActivity',{user_id:u.id,actividad_id:data.actividad.id})
+		axios.post('/api/unAssignActivity',{user_id:u.id,actividad_id:data.actividad.id})
 		.then(r=>{
 			const users=data.actividad.users.filter(us=>us.id!==u.id)
 			setData({...data,actividad:{...data.actividad,users}})
@@ -66,7 +64,7 @@ const Unidad = ({unidad,setUnidad}) =>{
 		console.log(unidad)
 		if(e.key=='Enter'){
 			console.log(data.newActividad)
-			axi.post('/api/newActivity',{unidad_id:unidad.id,actividad:data.newActividad})
+			axios.post('/api/newActivity',{unidad_id:unidad.id,actividad:data.newActividad})
 			.then(r=>{
 				console.log(r.data)
 				setUnidad({...unidad,actividades:[...unidad.actividades,r.data]})

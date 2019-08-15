@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { axi } from '../../config';
+import { axios } from '../../config';
 import M from 'materialize-css'
 
 const ActivitiesDone = () => {
@@ -10,9 +10,7 @@ const ActivitiesDone = () => {
 	const [filterDateInit, setFilterDateInit] = useState('')
 	const [filterDateFin, setFilterDateFin] = useState('')
 	useEffect(()=>{
-		const AUTH_TOKEN = localStorage.getItem('access_token');
-		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-		axi.get('/api/activitiesDone')
+		axios.get('/api/activitiesDone')
 		.then(r=>{
 			setActivitiesDone(r.data)
 		})

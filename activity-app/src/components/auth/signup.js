@@ -1,12 +1,12 @@
 import React,{useState} from 'react' 
-import {axi} from '../../config'
+import { axios } from '../../config'
 import { Link } from "react-router-dom";
 
 
 const Create=props=>{
 	const [data,setData] = useState({})
 	const _create=()=>{
-		axi.post('/api/signup',data).then(e=>{
+		axios.post('/api/signup',data).then(e=>{
 			alert('usuario creado')
 			props.history.push(`/`)
 		}).catch(e=>{

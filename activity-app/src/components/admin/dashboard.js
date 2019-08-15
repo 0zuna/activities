@@ -1,16 +1,13 @@
 import React,{useEffect, useContext, useState} from 'react';
 import M from 'materialize-css';
 import {UserContext} from '../../UserContext';
-import { axi } from '../../config'
+import { axios } from '../../config'
 import Arbol from './arbol'
 
 const Dash=()=>{
 	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
 	const [data,setData]=useState({});
 	useEffect(()=>{
-		const AUTH_TOKEN = localStorage.getItem('access_token');
-		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-
 		let elems = document.querySelectorAll('.dropdown-trigger');
 		M.Dropdown.init(elems, {inDuration: 300, outDuration: 225});
 		var elem = document.querySelector('.sidenav');
@@ -21,7 +18,7 @@ const Dash=()=>{
 		});
 	},[])
 	const _salir=()=>{
-		axi.get('/api/logout')
+		axios.get('/api/logout')
 		.then(r=>{
 			console.log(r.data)
 			setAuth(false)
@@ -31,7 +28,7 @@ const Dash=()=>{
 		var reader = new FileReader();
 		reader.readAsDataURL(e.target.files[0]);
 		reader.onload = () => {
-			axi.post('/api/upexcel',{excel:reader.result})
+			axios.post('/api/upexcel',{excel:reader.result})
 			.then(response=>{
 				console.log(response.data)
 				setArbol(response.data)

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import useCountdown from 'react-use-countdown'
-import { axi } from '../../config';
+import { axios } from '../../config';
 import { UserContext } from '../../UserContext';
 
 const _hora=(time)=>{
@@ -31,8 +31,6 @@ const Actividad = ({actividad, _updateConfirmacion, _updateActivity }) => {
 	const countdown = _hora(useCountdown(() =>ff)/1000);
 
 	useEffect(()=>{
-		const AUTH_TOKEN = localStorage.getItem('access_token');
-		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
 		if(actividad.confirmacions.length>0)
 			setHecha(true)
 	},[actividad])
@@ -66,7 +64,7 @@ const Actividad = ({actividad, _updateConfirmacion, _updateActivity }) => {
 	}
 
 	const _hecho = () =>{
-		axi.post('/api/activityDone',{actividad_id:actividad.id,user_id:user.id})
+		axios.post('/api/activityDone',{actividad_id:actividad.id,user_id:user.id})
 		.then(r=>{
 			_updateConfirmacion({actividad_id:actividad.id,confirmacions:r.data})
 			setHecha(true)
@@ -79,7 +77,7 @@ const Actividad = ({actividad, _updateConfirmacion, _updateActivity }) => {
 		var reader = new FileReader();
 		reader.readAsDataURL(e.target.files[0]);
 		reader.onload = () => {
-			axi.post('/api/fileUpload',{actividad_id:actividad.id,data:reader.result,name:name})
+			axios.post('/api/fileUpload',{actividad_id:actividad.id,data:reader.result,name:name})
 			.then(r=>{
 				actividad={...actividad,files:[...actividad.files,r.data]}
 				_updateActivity(actividad)
@@ -91,7 +89,7 @@ const Actividad = ({actividad, _updateConfirmacion, _updateActivity }) => {
 	const _deleteFile=(f)=>{
 		console.log(f)
 		actividad.files=actividad.files.filter(a=>f.id!==a.id)
-		axi.delete(`/api/fileUpload/${f.id}`)
+		axios.delete(`/api/fileUpload/${f.id}`)
 		.then(r=>{
 			console.log(r.data)
 			_updateActivity(actividad)
@@ -117,7 +115,7 @@ const Actividad = ({actividad, _updateConfirmacion, _updateActivity }) => {
 				{actividad.files.map(f=>
 				<p key={f.id}>
 				  <i onClick={()=>_deleteFile(f)} className="material-icons" style={{cursor: 'pointer'}}>delete</i>
-				  <a href={axi.defaults.baseURL+f.name}>{f.name.split('/')[3]}</a>
+				  <a href={axios.defaults.baseURL+f.name}>{f.name.split('/')[3]}</a>
 				</p>
 				)}
 			</div>

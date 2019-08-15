@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import AssignUser from './assignUser'
-import { axi } from '../../config'
+import { axios } from '../../config'
 
 
 const Departamento = ({departamento,setDepartamento}) =>{
 	const [actividades, setActividades]=useState([{actividad:'actividad1',descripcion:'descripcion1', status:'En Proceso'}]);
 	const [data, setData]=useState({newActividad:{actividad:''}})
-	useEffect(()=>{
-		const AUTH_TOKEN = localStorage.getItem('access_token');
-		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-	})
 	
 	const _assignDep=(user)=>{
-		axi.post('/api/jefe_dep',{departamento_id:departamento.id,user_id:user.id})
+		axios.post('/api/jefe_dep',{departamento_id:departamento.id,user_id:user.id})
 			.then((r)=>{
 				setDepartamento({...departamento,user})
 			})
@@ -20,7 +16,7 @@ const Departamento = ({departamento,setDepartamento}) =>{
 	}
 	const _newActivity=(e)=>{
 		if(e.key=='Enter'){
-		axi.post('/api/newActivityToUser',{...data.newActividad,user_id:departamento.user.id})
+		axios.post('/api/newActivityToUser',{...data.newActividad,user_id:departamento.user.id})
 			.then(r=>{
 				setData({...data,newActividad:{actividad:''}})
 				setDepartamento({...departamento,user:{...departamento.user,actividades:[...departamento.user.actividades,r.data]}})

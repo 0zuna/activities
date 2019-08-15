@@ -1,17 +1,15 @@
 import React,{ useEffect } from 'react'
-import { axi } from '../../../config';
+import { axios } from '../../../config';
 import M from 'materialize-css';
 
 const Resumen = ({data, setData, unidad, setUnidad}) => {
 	useEffect(()=>{
-		const AUTH_TOKEN = localStorage.getItem('access_token');
-		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
 		var elems = document.querySelectorAll('select');
 		M.FormSelect.init(elems, {});
 	},[data])
 	const _newSub=(e)=>{
 		if(e.key==='Enter'){
-			axi.post('/api/newSubActivity',{actividad_id:data.actividad.id,subactividad:data.newSubActividad})
+			axios.post('/api/newSubActivity',{actividad_id:data.actividad.id,subactividad:data.newSubActividad})
 			.then(r=>{
 				setData({...data,actividad:{...data.actividad,sub_actividades:[...data.actividad.sub_actividades,r.data]}})
 				console.log(r.data)
@@ -20,7 +18,7 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 	}
 	const _updateActivity=()=>{
 		console.log(data.actividad)
-		axi.put('/api/updateActivity',data.actividad)
+		axios.put('/api/updateActivity',data.actividad)
 		.then(r=>{
 			const acto=unidad.actividades.map(a=>{
 				if(a.id===data.actividad.id)

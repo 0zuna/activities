@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 //import M from 'materialize-css';
-import { axi } from '../../../config'
+import { axios } from '../../../config'
 import {UserContext} from '../../../UserContext';
 
 const AssignJerarquia=({assign})=>{
@@ -9,9 +9,7 @@ const AssignJerarquia=({assign})=>{
 	const [search, setSearch]=useState('')
 	const [actividades, setActividades]=useState([])
 	useEffect(()=>{
-		const AUTH_TOKEN = localStorage.getItem('access_token');
-		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-		axi.get('/api/users').then(r=>{
+		axios.get('/api/users').then(r=>{
 			setUsers(r.data)
 		}).catch(r=>alert('se ha producido un error'))
 

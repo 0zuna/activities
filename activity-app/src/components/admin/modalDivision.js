@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import AssignUser from './assignUser'
-import { axi } from '../../config'
+import { axios } from '../../config'
 
 
 const Division = ({division,setDivision}) =>{
 	const [actividades, setActividades]=useState([{actividad:'actividad1',descripcion:'descripcion1', status:'En Proceso'}]);
 	const [data, setData]=useState({newActividad:{actividad:''}})
-	useEffect(()=>{
-		const AUTH_TOKEN = localStorage.getItem('access_token');
-		axi.defaults.headers.common['Authorization'] = 'Bearer '+AUTH_TOKEN;
-	},[])
 	
 	const _assignDiv=(user)=>{
-		axi.post('/api/jefe_div',{division_id:division.id,user_id:user.id})
+		axios.post('/api/jefe_div',{division_id:division.id,user_id:user.id})
 			.then((r)=>{
 				setDivision({...division,user})
 			})
@@ -20,7 +16,7 @@ const Division = ({division,setDivision}) =>{
 	}
 	const _newActivity=(e)=>{
 		if(e.key=='Enter'){
-		axi.post('/api/newActivityToUser',{...data.newActividad,user_id:division.user.id})
+		axios.post('/api/newActivityToUser',{...data.newActividad,user_id:division.user.id})
 			.then(r=>{
 				setData({...data,newActividad:{actividad:''}})
 				setDivision({...division,user:{...division.user,actividades:[...division.user.actividades,r.data]}})
