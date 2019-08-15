@@ -31,11 +31,10 @@
     transform: rotate(360deg);
   }
 }
-.modal { width: 100% !important ; height: 100% !important ; }
  .modal.full {
       width: 100vw;
       max-height: 100vh;
-      height: 100vh;
+      height: 100vh !important;
       top:0 !important;
   }
 .scroll-box {
