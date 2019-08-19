@@ -47,4 +47,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 	Route::delete('fileUpload/{id}','EmpleadoController@deleteFileUpload');
 	Route::get('activitiesForget','EmpleadoController@activitiesForget');
 	Route::put('activityForgetDone','EmpleadoController@activityForgetDone');
+	Route::post('getUser','EmpleadoController@getUser');
+	Route::put('setUser','EmpleadoController@setUser');
+	Route::post('uploadImage','EmpleadoController@uploadImage');
 });

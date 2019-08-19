@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import ActivitiesDone from './activitiesDone'
 import ActivitiesForget from './activitiesForget'
 import DayActivities from './dayActivities'
+import Perfil from './perfil'
 
 const Dashboard = () => {
 	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
@@ -33,7 +34,7 @@ const Dashboard = () => {
 							<div className="background">
 								<img src="http://dimitri/usupso/activities/activity/public/assets/img/usupso_store.jpeg" style={{width:400}}/>
 							</div>
-							<a href="#user"><img className="circle" src="http://dimitri/usupso/activities/activity/public/assets/img/logo.jpeg"/></a>
+							<img className="circle" style={{border:'solid 1px', boxShadow: '0px 0px 10px 2px yellow'}} src={axios.defaults.baseURL+'assets/img/users/'+user.id+'.jpeg'} onError={(e)=>e.target.src=axios.defaults.baseURL+"assets/img/logo.jpeg"}></img>
 							<a href="#name"><span className="white-text name">{user.name}</span></a>
 							<a href="#email"><span className="white-text email">{user.email}</span></a>
 						</div>
@@ -44,8 +45,8 @@ const Dashboard = () => {
 					<li><Link to="/finish" className="waves-effect"><i className="material-icons" style={{color: 'green'}}>check</i>Mis actividades realizadas</Link></li>
 					<li><Link to="/forget" className="waves-effect"><i className="material-icons" style={{color: 'red'}}>sentiment_very_dissatisfied</i>Actividades Olvidadas</Link></li>
 					<li><div className="divider"></div></li>
-					<li><a className="subheader">Datos</a></li>
-					<li><a className="waves-effect" href="#!">Mis Datos</a></li>
+					<li><a className="subheader">Configuración</a></li>
+					<li><Link to="/myData" className="waves-effect" href="#!"><i className="material-icons" style={{color: 'blue'}}>account_circle</i>Mis Datos</Link></li>
 					<li><a onClick={_salir} className="waves-effect"><i className="material-icons">exit_to_app</i>Salir</a></li>
 				</ul>
 				<a href="#" data-target="slide-out" className="sidenav-trigger"><i className="material-icons">menu</i></a>
@@ -54,6 +55,7 @@ const Dashboard = () => {
 				<Route path="/" exact component={DayActivities} />
 				<Route path="/finish" exact component={ActivitiesDone} />
 				<Route path="/forget" exact component={ActivitiesForget} />
+				<Route path="/myData" exact component={Perfil} />
 			</div>
 		</div>
 	)

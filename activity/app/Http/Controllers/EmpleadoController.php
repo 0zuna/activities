@@ -12,6 +12,34 @@ use App\File;
 class EmpleadoController extends Controller
 {
     //
+	public function getUser(Request $request){
+		//$user=User::find($request->user_id)->with(['actividades']);
+		$user=User::with(['unidades'=>function($q){
+			$q->with(['division'=>function($q){
+					$q->with(['departamento']);
+				}]);
+		}])->find($request->user_id);
+		//$user->unidades();
+		return response()->json($user);
+	}
+	public function setUser(Request $request){
+		$user=User::find($request->id);
+		$user->name=$request->name;
+		$user->paterno=$request->paterno;
+		$user->materno=$request->materno;
+		$user->celular=$request->celular;
+		$user->puesto=$request->puesto;
+		$user->sobremi=$request->sobremi;
+		if($request->password)
+		$user->password=bcrypt($request->password);
+		$user->update();
+		return response()->json($user);
+	}
+	public function uploadImage(Request $request){
+		$path = storage_path().'/img/users/';
+		file_put_contents($path.$request->user()->id.'.jpeg', base64_decode(explode(',',$request->img)[1]));
+		return response()->json($request);
+	}
 	public function misActividades(Request $request)
 	{
 		$actividades=User::find($request->user_id)

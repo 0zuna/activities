@@ -34,7 +34,7 @@ const Division = ({division,setDivision}) =>{
 					<div className="col s3">
 						<div className="card">
 							<div className="card-image">
-								<img src="https://media.revistagq.com/photos/5ca5f030267a328ad27242c3/16:9/w_1920,c_limit/como_llevarte_bien_con_tu_jefe_regla_5_15_felicidad_trabajo_2065.jpg" alt='img'/>
+								<img src={axios.defaults.baseURL+'assets/img/users/'+division.user.id+'.jpg'} onError={(e)=>e.target.src=axios.defaults.baseURL+"assets/img/logo.jpeg"} alt="img"/>
 								<span className="card-title">{division.user.name}</span>
 							</div>
 							<div className="card-contenti">
