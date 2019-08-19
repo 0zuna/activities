@@ -25,6 +25,12 @@ const ActivitiesForget = () => {
 
 	return (
 		<div className="card-panel">
+		{activitiesForget.length==0&&
+		<h4 className="center">Felicidades no has dejado pasar una :)</h4>
+		}
+		{
+		activitiesForget.length>0&&
+				<div>
 				<h2 className="center">Actividades Olvidadas</h2>
 				<div className="row">
 				{activitiesForget.map((a,i)=>
@@ -42,6 +48,8 @@ const ActivitiesForget = () => {
 					</div>
 				)}
 				</div>
+				</div>
+		}
 		</div>
 	)
 }

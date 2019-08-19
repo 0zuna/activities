@@ -10,6 +10,7 @@ const ActivitiesDone = () => {
 	const [filterDateInit, setFilterDateInit] = useState('')
 	const [filterDateFin, setFilterDateFin] = useState('')
 	useEffect(()=>{
+		M.AutoInit();
 		axios.get('/api/activitiesDone')
 		.then(r=>{
 			setActivitiesDone(r.data)
