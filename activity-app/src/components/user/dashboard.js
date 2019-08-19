@@ -34,7 +34,9 @@ const Dashboard = () => {
 							<div className="background">
 								<img src="http://dimitri/usupso/activities/activity/public/assets/img/usupso_store.jpeg" style={{width:400}}/>
 							</div>
-							<img className="circle" style={{border:'solid 1px', boxShadow: '0px 0px 10px 2px yellow'}} src={axios.defaults.baseURL+'assets/img/users/'+user.id+'.jpeg'} onError={(e)=>e.target.src=axios.defaults.baseURL+"assets/img/logo.jpeg"}></img>
+							<div style={{width:100}}>
+								<div className="ratio img-responsive img-circle" style={{backgroundImage:"url("+axios.defaults.baseURL+'assets/img/users/'+user.id+'.jpeg'+")"}}></div>
+							</div>
 							<a href="#name"><span className="white-text name">{user.name}</span></a>
 							<a href="#email"><span className="white-text email">{user.email}</span></a>
 						</div>

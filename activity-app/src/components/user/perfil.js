@@ -49,13 +49,10 @@ const Perfil = () => {
 		{/*<h4 className="center">Mis Datos</h4>*/}
 			<div className="row">
 				<center style={{backgroundColor:''}}>
-				<div className="file-field" style={{width:210, backgroundColor:''}}>
-				<img className="circle file-field input-field" style={{width:200,height: 200, border:'solid 1px', boxShadow: '0px 0px 10px 2px yellow'}} src={axios.defaults.baseURL+'assets/img/users/'+user.id+'.jpeg'} onError={(e)=>e.target.src=axios.defaults.baseURL+"assets/img/logo.jpeg"}></img>
-					<input value="" type="file" onChange={(e)=>_fileUpload(e)} />
-					<div className="file-path-wrapper" style={{display:'none'}}>
-						<input className="file-path validate" type="text"/>
+					<div style={{width:200}}>
+						<div className="ratio img-responsive img-circle" style={{backgroundImage:"url("+axios.defaults.baseURL+'assets/img/users/'+user.id+'.jpeg'+")"}}>
+						</div>
 					</div>
-				</div>
 				</center>
 			</div>
 			<div className="row" style={{backgroundColor:''}}>
