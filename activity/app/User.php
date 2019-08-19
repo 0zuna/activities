@@ -54,4 +54,8 @@ class User extends Authenticatable
     {
 	return $this->hasMany('App\Confirmacion');
     }
+    public function unidades()
+    {
+	return $this->belongsToMany('App\Unidad');
+    }
 }

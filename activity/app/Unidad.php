@@ -15,4 +15,8 @@ class Unidad extends Model
 	{
 		return $this->hasMany('App\Actividad');
 	}
+	public function users()
+	{
+		return $this->belongsToMany('App\User');
+	}
 }
