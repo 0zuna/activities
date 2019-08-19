@@ -17,17 +17,46 @@ class UsersTableSeeder extends Seeder
         //
 	$user=new App\User();
 	$user->name='Erik Admin';
-	$user->email='admin@usupso.com';
+	$user->email='admin@usupso.com.mx';
 	$user->rol='admin';
         $user->password= bcrypt('1');
 	$user->save();
+
 	$user=new App\User();
-	$user->name='Erik Empleado';
-	$user->email='empleado@usupso.com';
+	$user->name='Karla';
+	$user->email='imagen@usupso.com.mx';
 	$user->rol='empleado';
-        $user->password= bcrypt('1');
+        $user->password= bcrypt('hola');
 	$user->save();
-	factory(App\User::class,100)->create();
+
+	$user=new App\User();
+	$user->name='Ernesto';
+	$user->email='proyectos@usupso.com.mx';
+	$user->rol='empleado';
+        $user->password= bcrypt('hola');
+	$user->save();
+
+	$user=new App\User();
+	$user->name='Laura';
+	$user->email='contabilidad@usupso.com.mx';
+	$user->rol='empleado';
+        $user->password= bcrypt('hola');
+	$user->save();
+
+	$user=new App\User();
+	$user->name='Jorge';
+	$user->email='jorge.mendoza@usupso.com.mx';
+	$user->rol='admin';
+        $user->password= bcrypt('hola');
+	$user->save();
+
+	$user=new App\User();
+	$user->name='Alvaro';
+	$user->email='alvaro.jimenez@usupso.com.mx';
+	$user->rol='admin';
+        $user->password= bcrypt('hola');
+	$user->save();
+	//factory(App\User::class,100)->create();
 
     }
 }
