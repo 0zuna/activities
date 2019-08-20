@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react'
 import useCountdown from 'react-use-countdown'
-import { axios } from '../../config';
-import { UserContext } from '../../UserContext';
+import { axios } from '../../config'
+import { UserContext } from '../../UserContext'
+import Jerarquia from './jerarquia.js'
 
 const _hora=(time)=>{
 	var hours = Math.floor( time / 3600 );
@@ -16,6 +17,7 @@ const Actividad = ({actividad, _updateConfirmacion, _updateActivity }) => {
 	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
 	const [hecha, setHecha]=useState(false)
 	const [show, setShow]=useState(false)
+	const [jerarquia, setJerarquia]=useState([])
 
 	var ff=new Date()
 	if(actividad.hora){
@@ -33,6 +35,11 @@ const Actividad = ({actividad, _updateConfirmacion, _updateActivity }) => {
 	useEffect(()=>{
 		if(actividad.confirmacions.length>0)
 			setHecha(true)
+		axios.post('/api/actividadJerarquia',{act_referencia:actividad.id})
+		.then(r=>{
+			setJerarquia(r.data)
+		})
+		.catch(r=>alert(r))
 	},[actividad])
 
 	const _styleActivity = () => {
@@ -100,37 +107,40 @@ const Actividad = ({actividad, _updateConfirmacion, _updateActivity }) => {
 	return (
 		<div className="card" style={_styleActivity()}>
 			<div className="card-content">
-			<div className="row">
-			<div className="col s9">
-				<div className="card-title">{actividad.actividad}</div>
-				<p>Descripción: {actividad.descripcion}</p>
-				<p>Hora de entrega: {actividad.hora}</p>
-				<div className="file-field input-field" style={{width:50}}>
-					<i className="material-icons">icloud_upload</i>
-					<input type="file" onChange={(e)=>_fileUpload(e)} />
-					<div className="file-path-wrapper" style={{display:'none'}}>
-						<input className="file-path validate" type="text"/>
+				<div className="row">
+					<div className="col s4">
+						<div className="card-title">{actividad.actividad}</div>
+						<p>Descripción: {actividad.descripcion}</p>
+						<p>Hora de entrega: {actividad.hora}</p>
+						<div className="file-field input-field" style={{width:50}}>
+							<i className="material-icons">icloud_upload</i>
+							<input type="file" onChange={(e)=>_fileUpload(e)} />
+							<div className="file-path-wrapper" style={{display:'none'}}>
+								<input className="file-path validate" type="text"/>
+							</div>
+						</div>
+						{actividad.files.map(f=>
+						<p key={f.id}>
+							<i onClick={()=>_deleteFile(f)} className="material-icons" style={{cursor: 'pointer'}}>delete</i>
+							<a href={axios.defaults.baseURL+f.name}>{f.name.split('/')[3]}</a>
+						</p>
+						)}
+					</div>
+					{jerarquia.length>0&&
+						<Jerarquia jerarquia={jerarquia}/>
+					}
+					<div className="col s2 right">
+					{hecha&&
+						<div className="row">
+							<div>{actividad.confirmacions[0].fecha} {actividad.confirmacions[0].hora}
+								<i className="large material-icons right" style={{color: 'green'}}>check</i>
+							</div>
+						</div>
+					}{!hecha&&
+						<h4>{countdown}</h4>
+					}
 					</div>
 				</div>
-				{actividad.files.map(f=>
-				<p key={f.id}>
-				  <i onClick={()=>_deleteFile(f)} className="material-icons" style={{cursor: 'pointer'}}>delete</i>
-				  <a href={axios.defaults.baseURL+f.name}>{f.name.split('/')[3]}</a>
-				</p>
-				)}
-			</div>
-			<div className="col s3">
-				{hecha&&
-					<div className="row">
-						<div>{actividad.confirmacions[0].fecha} {actividad.confirmacions[0].hora}
-							<i className="large material-icons right" style={{color: 'green'}}>check</i>
-						</div>
-					</div>
-				}{!hecha&&
-				<h4>{countdown}</h4>
-				}
-			</div>
-			</div>
 			</div>
 			{!hecha&&
 			<div className="card-action">
