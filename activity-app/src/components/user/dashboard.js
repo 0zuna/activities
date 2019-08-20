@@ -32,13 +32,13 @@ const Dashboard = () => {
 					<li>
 						<div className="user-view">
 							<div className="background">
-								<img src="http://dimitri/usupso/activities/activity/public/assets/img/usupso_store.jpeg" style={{width:400}}/>
+								<img src={axios.defaults.baseURL+"/assets/img/U.png"} style={{width:300}}/>
 							</div>
 							<div style={{width:100}}>
 								<div className="ratio img-responsive img-circle" style={{backgroundImage:"url("+axios.defaults.baseURL+'assets/img/users/'+user.id+'.jpeg'+")"}}></div>
 							</div>
-							<a href="#name"><span className="white-text name">{user.name}</span></a>
-							<a href="#email"><span className="white-text email">{user.email}</span></a>
+							<a href="#name"><span className="white-text name" style={{fontSize:40,fontWeight: 'bold'}}>{user.name}</span></a>
+							<a href="#email"><span className="white-text email" style={{fontWeight: 'bold'}}>{user.email}</span></a>
 						</div>
 					</li>
 					{/*<li><a href="#!" className="waves-effect"><i className="material-icons">today</i>Mis Actividades Diarias</a></li>
