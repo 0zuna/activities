@@ -50,4 +50,6 @@ Route::group(['middleware' => 'auth:api'], function() {
 	Route::post('getUser','EmpleadoController@getUser');
 	Route::put('setUser','EmpleadoController@setUser');
 	Route::post('uploadImage','EmpleadoController@uploadImage');
+	Route::post('mensajera','EmpleadoController@mensajera');
+	Route::post('reportar','EmpleadoController@reportar');
 });

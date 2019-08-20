@@ -35,4 +35,8 @@ class Actividad extends Model
 	{
 		return $this->hasMany('App\File');
 	}
+	public function reportados()
+	{
+		return $this->hasMany('App\Reportado');
+	}
 }

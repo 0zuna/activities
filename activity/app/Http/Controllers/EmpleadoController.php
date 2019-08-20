@@ -8,6 +8,7 @@ use App\Confirmacion;
 use Carbon\Carbon;
 use App\Actividad;
 use App\File;
+use App\Reportado;
 
 class EmpleadoController extends Controller
 {
@@ -202,5 +203,29 @@ class EmpleadoController extends Controller
 		$confirmacion->realizada=true;
 		$confirmacion->update();
 		return response()->json($confirmacion);
+	}
+	public function mensajera(Request $request)
+	{
+		global $from, $to, $mensaje;
+		$from=User::find($request->from);
+		$to=User::find($request->to);
+		$mensaje=$request->mensaje;
+		\Mail::send('mail.text', ['actividad'=>$mensaje], function ($message) {
+			global $from, $to;
+			$message->from('desarrollo@usupso.com.mx', 'Usupso System');
+			$message->subject('Usted tiene un mensaje de '.$from->name);
+			$message->to($to->email);
+		});
+		return response()->json($request);
+	}
+	public function reportar(Request $request)
+	{
+		foreach ($request->users as $user) {
+			$report= new Reportado();
+			$report->actividad_id=$request->actividad_id;
+			$report->user_id=$user['id'];
+			$report->save();
+		}
+		return response()->json($request);
 	}
 }
