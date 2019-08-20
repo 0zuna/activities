@@ -23,14 +23,14 @@ class ExcelController extends Controller
 					$depa->departamento=$v[0];
 					$depa->save();
 				}
-				$div=Division::where('division',$v[1])->first();
+				$div=Division::where('division',$v[1])->where('departamento_id',$depa->id)->first();
 				if(!$div){
 					$div=new Division();
 					$div->division=$v[1];
 					$div->departamento_id=$depa->id;
 					$div->save();
 				}
-				$unni=Unidad::where('unidad',$v[2])->first();
+				$unni=Unidad::where('unidad',$v[2])->where('division_id',$div->id)->first();
 				if(!$unni){
 					$unni=new Unidad();
 					$unni->unidad=$v[2];
