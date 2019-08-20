@@ -72,7 +72,7 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 				}
 					<div className="col s6">
 						<label htmlFor="time">Hora</label>
-						<input onChange={e=>setData({...data,actividad:{...data.actividad,hora:e.target.value}})} value={data.actividad.hora||''} id="time" type="text" className="timepicker" placeholder="hora"/>
+						<input onChange={e=>setData({...data,actividad:{...data.actividad,hora:e.target.value}})} value={data.actividad.hora||'18:00:00'} id="time" type="text" className="timepicker" placeholder="hora"/>
 					</div>
 				</div>
 				<div className="row">

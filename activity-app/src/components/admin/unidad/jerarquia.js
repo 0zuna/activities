@@ -110,10 +110,10 @@ const Jerarquia = ({actividad}) =>{
 																<ul className="collection">
 																{item.users.map(u=>
 																	<li key={u.id} className="collection-item avatar">
-																		<img src="https://2.bp.blogspot.com/-VCaXrTYV8sE/WyBY7dMKn5I/AAAAAAAAD58/tht3FfaFHRksaxglk1XGrr5Jt73LIxPagCLcBGAs/s1600/SUZY-FANSERVICE-2017.png" alt="" className="circle"/>
-																		<span className="title">Erik</span>
-																		<p><br />
-																		<a href="mailto:erik@gmail.com">erik@gmail.com</a>
+																		<img src={axios.defaults.baseURL+'/assets/img/users/'+u.id+'.jpeg'} alt="" className="circle"/>
+																		<span className="title">{u.name}</span>
+																		<p>{u.celular}<br />
+																		<a href={"mailto:"+u.email}>{u.email}</a>
 																		</p><a href="#!" className="secondary-content">
 																		<i className="material-icons" style={{color: 'gold'}}>grade</i>
 																		<i className="material-icons">close</i>

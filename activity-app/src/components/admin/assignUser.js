@@ -29,7 +29,7 @@ const AssignUser=({assign})=>{
 			<div className="card-panel grey lighten-5 z-depth-1">
 				<div className="row valign-wrapper">
 					<div className="col s4">
-						<img className="circle responsive-img" src={axios.defaults.baseURL+'assets/img/users/'+u.id+'.jpg'} onError={(e)=>e.target.src=axios.defaults.baseURL+"assets/img/logo.jpeg"} />
+						<img className="circle responsive-img" src={axios.defaults.baseURL+'assets/img/users/'+u.id+'.jpeg'} onError={(e)=>e.target.src=axios.defaults.baseURL+"assets/img/logo.jpeg"} />
 					</div>
 					<div className="col s10">
 						<span className="black-text">

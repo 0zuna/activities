@@ -108,7 +108,7 @@ const Unidad = ({unidad,setUnidad}) =>{
 						<ul className="collection">
 						{data.actividad.users&&data.actividad.users.map((u,i)=>
 							<li key={i} className="collection-item avatar">
-								<img className="circle" src={axios.defaults.baseURL+'assets/img/users/'+u.id+'.jpg'} onError={(e)=>e.target.src=axios.defaults.baseURL+"assets/img/logo.jpeg"} alt="img"/>
+								<img className="circle" src={axios.defaults.baseURL+'assets/img/users/'+u.id+'.jpeg'} onError={(e)=>e.target.src=axios.defaults.baseURL+"assets/img/logo.jpeg"} alt="img"/>
 								<span className="title">{u.name}</span>
 								<p>{u.celular} <br />
 								<a href={"mailto:"+u.email}>{u.email}</a>
