@@ -58,7 +58,7 @@ class AdminController extends Controller
         	$actividad->users()->attach($user);
 		\Mail::send('mail.text', ['actividad'=>$actividad->actividad], function ($message) {
 			global $user;
-			$message->from('desarrollo@usupso.com.mx', 'desarrollo');
+			$message->from('desarrollo@usupso.com.mx', 'Usupso System');
 			$message->subject('Nueva Actividad');
 			$message->to($user->email);
 		});
@@ -110,7 +110,7 @@ class AdminController extends Controller
         	$acti->users()->attach($user);
 		\Mail::send('mail.text', ['actividad'=>$acti->actividad], function ($message) {
 			global $user;
-			$message->from('desarrollo@usupso.com.mx', 'Usupso Activity System');
+			$message->from('desarrollo@usupso.com.mx', 'Usupso System');
 			$message->subject('Usupso Activity');
 			$message->to($user->email);
 		});
@@ -156,12 +156,45 @@ class AdminController extends Controller
 		}
 		return response()->json($request);
 	}
+	public function entrega($acto){
+			if($v->tipo=='semanal'||$v->tipo=='mensual'){
+				$solicitada=Carbon::createFromFormat('Y-m-d H:i:s', $v->fechaConfirmacion);
+				$entregada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaEntregada);
+				$horaSolicitada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaSolicitada);
+				if($entregada<=$solicitada&&$entregada<$horaSolicitada){
+					$acto->entregadaATiempo=true;
+				}else{
+					$acto->entregadaATiempo=false;
+				}
+				
+			}
+			if($v->tipo=='diaria'){
+				$solicitada=Carbon::createFromFormat('Y-m-d H:i:s', $v->fechaConfirmacion);
+				$entregada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaEntregada);
+				$horaSolicitada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaSolicitada);
+				if($solicitada==$entregada&&$entregada<$horaSolicitada){
+					$acto->entregadaATiempo=true;
+				}else{
+					$acto->entregadaATiempo=false;
+				}
+			}
+			if($v->tipo=='unica'){
+				$solicitada=Carbon::createFromFormat('Y-m-d H:i:s', $v->fechaSolicitada.' '.$v->horaSolicitada);
+				$entregada=Carbon::createFromFormat('Y-m-d H:i:s',$v->fechaEntregada.' '.$v->horaEntregada);
+				if($entregada<$solicitada){
+					$acto->entregadaATiempo=true;
+				}else{
+					$acto->entregadaATiempo=false;
+				}
+			}
+	}
 	public function status($actividad){
 		return $actividad;
 		if($actividad->periodicidad=='unica'){
 			$confirmacion=Confirmacion::where('actividad_id',$actividad->id)->first();
 		}
 	}
+
 	public function actividadJerarquia(Request $request)
 	{
 		$actividades=[];
@@ -170,16 +203,16 @@ class AdminController extends Controller
 		$jerarquia=Jerarquia::where('actividad_id',$je->actividad_id)->orderBy('fase')->get();
 		foreach ($jerarquia as $jera){
 			//$actividad=Actividad::with(['users','unidad'])->where('id', $jera->act_referencia)->first();
-			$actos=Actividad::with(['users','files'])
+			$actos=Actividad::with(['users','files','confirmacions'=>function($q){$q->orderBy('created_at','desc')->first();}])
 				->select('actividads.*','unidads.unidad','divisions.division','departamentos.departamento')
 				->join('unidads','actividads.unidad_id','unidads.id')
 				->join('divisions','unidads.division_id','divisions.id')
 				->join('departamentos','divisions.departamento_id','departamentos.id')
 				->where('actividads.id', $jera->act_referencia)
 				->first();
-			foreach ($actos as $k=>$v) {
+			/*foreach ($actos as $k=>$v) {
 				$actos[$k]=$this->status($v);
-			}
+			}*/
 			array_push($actividades, $actos);
 		}
 		}
