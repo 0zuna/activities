@@ -18,7 +18,7 @@ class CreateActividadsTable extends Migration
             $table->string('actividad');
             $table->string('descripcion')->nullable();
             $table->date('fecha')->nullable();
-            $table->time('hora')->nullable();
+            $table->time('hora')->default('18:00:00');
             $table->string('tipo')->default('unica');
             $table->boolean('reporte')->default(false);
 	    $table->unsignedBigInteger('unidad_id')->nullable();
