@@ -50,15 +50,17 @@ class AdminController extends Controller
 		return response()->json($actividades);
 	}
 	public function newActivityToUser(Request $request){
+		global $user;
         	$user = User::find($request->user_id);
 		$actividad=new Actividad();
 		$actividad->actividad=$request->actividad;
 		$actividad->save();
         	$actividad->users()->attach($user);
 		\Mail::send('mail.text', ['actividad'=>$actividad->actividad], function ($message) {
+			global $user;
 			$message->from('desarrollo@usupso.com.mx', 'desarrollo');
 			$message->subject('Nueva Actividad');
-			$message->to('er1k_92@hotmail.com');
+			$message->to($user->email);
 		});
 		return response()->json($actividad);
 	}
@@ -102,14 +104,16 @@ class AdminController extends Controller
 	}
 	public function assignActivity(Request $request)
 	{
+		global $user;
 		$user=User::find($request->user_id);
 		$acti=Actividad::find($request->actividad_id);
         	$acti->users()->attach($user);
-		/*\Mail::send('mail.text', ['actividad'=>$acti->actividad], function ($message) {
+		\Mail::send('mail.text', ['actividad'=>$acti->actividad], function ($message) {
+			global $user;
 			$message->from('desarrollo@usupso.com.mx', 'Usupso Activity System');
 			$message->subject('Usupso Activity');
-			$message->to('er1k_92@hotmail.com');
-		});*/
+			$message->to($user->email);
+		});
 		return response()->json($request);
 	}
 	public function unAssignActivity(Request $request)
@@ -152,6 +156,12 @@ class AdminController extends Controller
 		}
 		return response()->json($request);
 	}
+	public function status($actividad){
+		return $actividad;
+		if($actividad->periodicidad=='unica'){
+			$confirmacion=Confirmacion::where('actividad_id',$actividad->id)->first();
+		}
+	}
 	public function actividadJerarquia(Request $request)
 	{
 		$actividades=[];
@@ -160,13 +170,16 @@ class AdminController extends Controller
 		$jerarquia=Jerarquia::where('actividad_id',$je->actividad_id)->orderBy('fase')->get();
 		foreach ($jerarquia as $jera){
 			//$actividad=Actividad::with(['users','unidad'])->where('id', $jera->act_referencia)->first();
-			$actos=Actividad::with(['users'])
+			$actos=Actividad::with(['users','files'])
 				->select('actividads.*','unidads.unidad','divisions.division','departamentos.departamento')
 				->join('unidads','actividads.unidad_id','unidads.id')
 				->join('divisions','unidads.division_id','divisions.id')
 				->join('departamentos','divisions.departamento_id','departamentos.id')
 				->where('actividads.id', $jera->act_referencia)
 				->first();
+			foreach ($actos as $k=>$v) {
+				$actos[$k]=$this->status($v);
+			}
 			array_push($actividades, $actos);
 		}
 		}
