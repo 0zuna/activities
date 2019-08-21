@@ -228,4 +228,69 @@ class EmpleadoController extends Controller
 		}
 		return response()->json($request);
 	}
+	public function assigned(Request $request)
+	{
+		//$actos=$request->user()->actividades->with(['periodicidad']);
+		$actos=User::with(['actividades'=>function($q){
+			$q->with(['confirmacions','periodicidad'])->where('actividads.fecha','>=',date('Y-m-d'))->orWhereIn('tipo',['diaria','semanal','mensual']);
+		}])->where('users.id',$request->user()->id)->get();
+		$actos=$actos[0]->actividades;
+		foreach ($actos as $k=>$v) {
+			if($v->tipo=='unica'){
+				$actos[$k]->fechaEntrega=$v->fecha.' '.$v->hora;
+			}
+			if($v->tipo=='diaria'){
+				$actos[$k]->fechaEntrega=date('Y-m-d').' '.$v->hora;
+			}
+			if($v->tipo=='semanal'){
+				$days=['lunes'=>1,'martes'=>2,'miercoles'=>3,'jueves'=>4,'viernes'=>5,'sabado'=>6];
+				$diaSolicita=$days[$v->periodicidad->dia];//1
+				$diaNow=Carbon::now()->dayOfWeek;//3
+				$diasRestantes=abs(abs($diaSolicita-$diaNow)-7);
+				$newDay=Carbon::now()->addDay($diasRestantes);
+				$actos[$k]->fechaEntrega=$newDay->format('Y-m-d');
+				$actos[$k]->horaEntrega=$v->hora;
+			}
+			if($v->tipo=='mensual'){
+				$days=['lunes'=>1,'martes'=>2,'miercoles'=>3,'jueves'=>4,'viernes'=>5,'sabado'=>6];
+				$now=Carbon::now();
+				if($now->day<=7){
+					$diaSolicita=$days[$v->periodicidad->dia];//1
+					$diaNow=Carbon::now()->dayOfWeek;//3
+					if($diaNow==0)
+					$diasRestantes=abs(abs($diaSolicita-$diaNow));
+					else
+					$diasRestantes=abs(abs($diaSolicita-$diaNow)-7);
+					$newDay=Carbon::now()->addDay($diasRestantes);
+					$actos[$k]->fechaEntrega=$newDay->format('Y-m-d');
+					$actos[$k]->horaEntrega=$v->hora;
+				}
+				else{
+					$startDay = Carbon::now()->startOfMonth()->addMonth();
+					$diaSolicita=$days[$v->periodicidad->dia];//1
+					$diaNow=$startDay->dayOfWeek;//0
+					if($diaNow==0)
+					$diasRestantes=abs(abs($diaSolicita-$diaNow));
+					else
+					$diasRestantes=abs(abs($diaSolicita-$diaNow)-7);
+					$newDay=$startDay->addDay($diasRestantes);
+					$actos[$k]->fechaEntrega=$newDay->format('Y-m-d');
+					$actos[$k]->horaEntrega=$v->hora;
+					$actos[$k]->test=$startDay;
+				}
+			}
+		}
+		return response()->json($actos);
+	}
+	public function hecha(Request $request)
+	{
+		$conf=new Confirmacion();
+		$conf->actividad_id=$request->actividad_id;
+		$conf->user_id=$request->user()->id;
+		$conf->fecha=date('Y-m-d');
+		$conf->hora=date('H:i:s');
+		$conf->created_at=$request->fechaEntrega.' '.$request->horaEntrega;
+		$conf->save();
+		return response()->json($conf);
+	}
 }

@@ -52,4 +52,6 @@ Route::group(['middleware' => 'auth:api'], function() {
 	Route::post('uploadImage','EmpleadoController@uploadImage');
 	Route::post('mensajera','EmpleadoController@mensajera');
 	Route::post('reportar','EmpleadoController@reportar');
+	Route::get('assigned','EmpleadoController@assigned');
+	Route::post('hecha','EmpleadoController@hecha');
 });

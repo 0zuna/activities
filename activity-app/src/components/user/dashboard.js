@@ -6,6 +6,7 @@ import ActivitiesDone from './activitiesDone'
 import ActivitiesForget from './activitiesForget'
 import DayActivities from './dayActivities'
 import Perfil from './perfil'
+import Assigned from './assigned'
 
 const Dashboard = () => {
 	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
@@ -44,6 +45,7 @@ const Dashboard = () => {
 					{/*<li><a href="#!" className="waves-effect"><i className="material-icons">today</i>Mis Actividades Diarias</a></li>
 					*/}
 					<li><Link to="/" className="waves-effect"><i className="material-icons">today</i>Mis Actividades Diarias</Link></li>
+					<li><Link to="/assigned" className="waves-effect"><i className="material-icons" style={{color:'purple'}}>new_releases</i>Mis Actividades Asignadas</Link></li>
 					<li><Link to="/finish" className="waves-effect"><i className="material-icons" style={{color: 'green'}}>check</i>Mis actividades realizadas</Link></li>
 					<li><Link to="/forget" className="waves-effect"><i className="material-icons" style={{color: 'red'}}>sentiment_very_dissatisfied</i>Actividades Olvidadas</Link></li>
 					<li><div className="divider"></div></li>
@@ -58,6 +60,7 @@ const Dashboard = () => {
 				<Route path="/finish" exact component={ActivitiesDone} />
 				<Route path="/forget" exact component={ActivitiesForget} />
 				<Route path="/myData" exact component={Perfil} />
+				<Route path="/assigned" exact component={Assigned} />
 			</div>
 		</div>
 	)
