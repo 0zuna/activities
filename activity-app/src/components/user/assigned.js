@@ -40,7 +40,7 @@ const Assigned = () => {
 						<tr key={i}>
 							<td>{i+1}</td>
 							<td>{a.actividad}</td>
-							<td>{a.tipo} {a.tipo!='unica'?a.periodicidad.dia:''}</td>
+							<td>{a.tipo} {a.tipo=='semanal'||a.tipo=='mensual'?a.periodicidad.dia:''}</td>
 							<td>{a.fechaEntrega} {a.horaEntrega}</td>
 							<td>
 								<button onClick={()=>_hecha(a)} className="btn">Hecha</button>
