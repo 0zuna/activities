@@ -41,6 +41,12 @@ const Actividad = ({actividad, _updateConfirmacion, _updateActivity }) => {
 		})
 		.catch(r=>alert(r))
 	},[actividad])
+	
+	if(actividad.confirmacions==0 && countdown==='0:00:00'){
+		axios.post('/api/notDone',actividad)
+		.then(r=>console.log(r.data))
+		.catch(r=>alert(r))
+	}
 
 	const _styleActivity = () => {
 		if(actividad.confirmacions[0]&&actividad.confirmacions[0].hora<actividad.hora)
