@@ -73,6 +73,15 @@ const Unidad = ({unidad,setUnidad}) =>{
 			.catch(r=>alert(r))
 		}
 	}
+
+	const _styleActo=(status)=>{
+		if(status==0)
+			return {backgroundColor:'#FFBDBD'}
+		if(status==1)
+			return {backgroundColor:'#DAFFB5'}
+		if(status==-1)
+			return {backgroundColor:'#FFF289'}
+	}
 	
 	return (
 		<div id="modalUnidad" className="modal modal-fixed-footer full">
@@ -84,7 +93,7 @@ const Unidad = ({unidad,setUnidad}) =>{
 					<div className="collection with-header">
 						<div className="collection-header"><h4>Actividades</h4></div>
 						{unidad.actividades&&unidad.actividades.map(a=>
-							<a href="#!" key={a.id} onClick={(e)=>setData({...data,actividad:a})} className="collection-item">{a.actividad}</a>
+							<a href="#!" key={a.id} onClick={(e)=>setData({...data,actividad:a})} className="collection-item" style={_styleActo(a.status)}>{a.actividad}</a>
 						)}
 					</div>
 					<div className="input-field col s12">
@@ -99,7 +108,15 @@ const Unidad = ({unidad,setUnidad}) =>{
 					<div className='col s9'>
 					<div className='center'>
 						<h5>{data.actividad.actividad}
-							<span className="badge yellow white-text">{data.actividad.confirmacion==null?'En Proceso':'Terminada'}</span>
+							{data.actividad.status==-1&&
+							<span className="badge yellow white-text">En Proceso</span>
+							}
+							{data.actividad.status==1&&
+							<span className="badge green white-text">Realizada</span>
+							}
+							{data.actividad.status==0&&
+							<span className="badge red white-text">NO Realizada</span>
+							}
 						</h5>
 					</div>
 					<div className="col s4">

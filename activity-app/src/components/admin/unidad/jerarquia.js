@@ -14,6 +14,7 @@ const Jerarquia = ({actividad}) =>{
 		axios.post('/api/actividadJerarquia',{act_referencia:actividad.id})
 		.then(r=>{
 			r.data.length>0&&setItems(r.data)
+			console.log(r.data)
 		})
 		.catch(r=>alert(r))
 		}
@@ -125,7 +126,15 @@ const Jerarquia = ({actividad}) =>{
 															</div>
 														</div>
 														<div className="col s3">
-														  <i className="large material-icons right" style={{color:'green'}}>check</i>
+														{item.status==1&&
+														<i className="large material-icons right" style={{color:'green'}}>check</i>
+														}
+														{item.status==0&&
+														<i className="large material-icons right" style={{color:'red'}}>sentiment_very_dissatisfied</i>
+														}
+														{item.status==-1&&
+														<span className="badge yellow white-text">En Proceso</span>
+														}
 														  <h4>FASE {index+1}</h4>
 														</div>
 														</div>
@@ -146,9 +155,6 @@ const Jerarquia = ({actividad}) =>{
 						</DragDropContext>
 						</div>
 						<AssignJerarquia assign={_assignJerarquia}/>
-					</div>
-					<div className="card-action">
-						<a href="#">Agregar actividad</a>
 					</div>
 				</div>
 			</div>

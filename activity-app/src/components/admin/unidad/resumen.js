@@ -37,7 +37,15 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 				</div>
 				<p>{data.actividad&&data.actividad.actividad}</p>
 				<div className="row">
-					<span className="badge yellow white-text">{'En Proceso'}</span>
+					{data.actividad.status==-1&&
+					<span className="badge yellow white-text">En Proceso</span>
+					}
+					{data.actividad.status==1&&
+					<span className="badge green white-text">Realizada</span>
+					}
+					{data.actividad.status==0&&
+					<span className="badge red white-text">NO Realizada</span>
+					}
 				</div>
 				<div className="input-field col s12">
 					<select value={data.actividad.tipo||''} onChange={e=>setData({...data,actividad:{...data.actividad,tipo:e.target.value}})}>

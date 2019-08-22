@@ -16,8 +16,9 @@ const Arbol=()=>{
 		M.AutoInit();
 		axios.get('/api/data').then(r=>{
 			setArbol(r.data)
+			console.log(r.data)
 
-		}).catch(r=>alert('se ha producido un error'))
+		}).catch(r=>alert(r))
 	},[setArbol])
 	const _departamentoShow=(d)=>{
 		setDepartamento(d)
@@ -63,7 +64,17 @@ const Arbol=()=>{
 						{div.unidads.map(unni=>{
 						return <div key={unni.id} className='row'>
 						<div className='col'>
-				<a className="waves-effect waves-light btn-large white black-text modal-trigger" data-target="modalUnidad" onClick={()=>_unniShow(unni)}>{unni.unidad}</a>
+				<a className="waves-effect waves-light btn-large white black-text modal-trigger" data-target="modalUnidad" onClick={()=>_unniShow(unni)}>{unni.unidad}
+				{unni.notDone>0&&
+					<span className="badge circle" style={{border:'1px solid red',backgroundColor:'#FFD8D8',boxShadow: '0px 0px 10px red'}}>{unni.notDone}</span>
+				}
+				{unni.inProcess>0&&
+					<span className="badge circle" style={{border:'1px solid yellow',backgroundColor:'#FFFCEA',boxShadow: '0px 0px 10px yellow'}}>{unni.inProcess}</span>
+				}
+				{unni.done>0&&
+					<span className="badge circle" style={{border:'1px solid green',backgroundColor:'#E0FFC2',boxShadow: '0px 0px 10px green'}}>{unni.done}</span>
+				}
+				</a>
 						</div>
 						</div>
 						})
