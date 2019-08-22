@@ -62,7 +62,7 @@ class UsersTableSeeder extends Seeder
 	$user->materno='Santigo';
 	$user->puesto='Administrador';
 	$user->celular='3314153248';
-	$user->rol='admin';
+	$user->rol='empleado';
         $user->password= bcrypt('hola');
 	$user->save();
 
@@ -73,7 +73,7 @@ class UsersTableSeeder extends Seeder
 	$user->materno='Romero';
 	$user->puesto='Dirección Administrativa';
 	$user->celular='3313194284';
-	$user->rol='admin';
+	$user->rol='empleado';
         $user->password= bcrypt('hola');
 	$user->save();
 
@@ -84,7 +84,7 @@ class UsersTableSeeder extends Seeder
 	$user->materno='Romero';
 	$user->puesto='Dirección Comercial';
 	$user->celular='3315485858';
-	$user->rol='admin';
+	$user->rol='empleado';
         $user->password= bcrypt('hola');
 	$user->save();
 
@@ -95,6 +95,26 @@ class UsersTableSeeder extends Seeder
 	$user->email='compras@usupso.com.mx';
 	$user->rol='empleado';
 	$user->celular='3328397922';
+        $user->password= bcrypt('hola');
+	$user->save();
+
+	$user=new App\User();
+	$user->name='Julio Cesar';
+	$user->paterno='Munguia';
+	$user->materno='Olvera';
+	$user->email='soporte@usupso.com.mx';
+	$user->rol='empleado';
+	$user->celular='2411380277';
+        $user->password= bcrypt('hola');
+	$user->save();
+
+	$user=new App\User();
+	$user->name='Gamaliel';
+	$user->paterno='Cruz';
+	$user->materno='Vazquez';
+	$user->email='recursoshumanos@usupso.com.mx';
+	$user->rol='empleado';
+	$user->celular='3322740946';
         $user->password= bcrypt('hola');
 	$user->save();
 	//factory(App\User::class,100)->create();
