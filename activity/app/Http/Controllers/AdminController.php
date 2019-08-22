@@ -11,11 +11,98 @@ use App\Mail\NotifyMail;
 use App\SubActividad;
 use App\Jerarquia;
 use App\Periodicidad;
+use App\Confirmacion;
+use Carbon\Carbon;
 
 
 class AdminController extends Controller
 {
     //
+	public function assignFechaEntrega($actos){
+		foreach ($actos as $k=>$v) {
+			if($v->tipo=='unica'){
+				$actos[$k]->fechaEntrega=$v->fecha;
+				$actos[$k]->horaEntrega=$v->hora;
+			}
+			if($v->tipo=='diaria'){
+				$actos[$k]->fechaEntrega=date('Y-m-d');
+				$actos[$k]->horaEntrega=$v->hora;
+			}
+			if($v->tipo=='semanal'){
+				$days=['lunes'=>1,'martes'=>2,'miercoles'=>3,'jueves'=>4,'viernes'=>5,'sabado'=>6];
+				$diaSolicita=$days[$v->periodicidad->dia];//1
+				$diaNow=Carbon::now()->dayOfWeek;//3
+				$diasRestantes=abs(abs($diaSolicita-$diaNow)-7);
+				$newDay=Carbon::now()->addDay($diasRestantes);
+				$actos[$k]->fechaEntrega=$newDay->format('Y-m-d');
+				$actos[$k]->horaEntrega=$v->hora;
+			}
+			if($v->tipo=='mensual'){
+				$days=['lunes'=>1,'martes'=>2,'miercoles'=>3,'jueves'=>4,'viernes'=>5,'sabado'=>6];
+				$now=Carbon::now();
+				if($now->day<=7){
+					$diaSolicita=$days[$v->periodicidad->dia];//1
+					$diaNow=Carbon::now()->dayOfWeek;//3
+					if($diaNow==0)
+					$diasRestantes=abs(abs($diaSolicita-$diaNow));
+					else
+					$diasRestantes=abs(abs($diaSolicita-$diaNow)-7);
+					$newDay=Carbon::now()->addDay($diasRestantes);
+					$actos[$k]->fechaEntrega=$newDay->format('Y-m-d');
+					$actos[$k]->horaEntrega=$v->hora;
+				}
+				else{
+					$startDay = Carbon::now()->startOfMonth()->addMonth();
+					$diaSolicita=$days[$v->periodicidad->dia];//1
+					$diaNow=$startDay->dayOfWeek;//0
+					if($diaNow==0)
+					$diasRestantes=abs(abs($diaSolicita-$diaNow));
+					else
+					$diasRestantes=abs(abs($diaSolicita-$diaNow)-7);
+					$newDay=$startDay->addDay($diasRestantes);
+					$actos[$k]->fechaEntrega=$newDay->format('Y-m-d');
+					$actos[$k]->horaEntrega=$v->hora;
+					$actos[$k]->test=$startDay;
+				}
+			}
+		}
+		return $actos;
+	}
+	public function evalua($actos){
+		$actos=$this->assignFechaEntrega($actos);
+		foreach ($actos as $k=>$v) {
+			if($v->tipo=='unica'){
+				$conf=Confirmacion::where('actividad_id',$v->id)->where('fecha',$v->fecha)->first();
+				if($conf){
+					$actos[$k]->status=$conf->realizada;
+				}
+				else{
+					$actos[$k]->status=-1;
+				}
+					
+			}
+			if($v->tipo=='diaria'){
+				$conf=Confirmacion::where('actividad_id',$v->id)->where('fecha',date('Y-m-d'))->first();
+				if($conf){
+					$actos[$k]->status=$conf->realizada;
+				}
+				else{
+					$actos[$k]->status=-1;
+				}
+			}
+			if($v->tipo=='semanal'||$v->tipo=='mensual'){
+				$conf=Confirmacion::where('actividad_id',$v->id)->where('created_at','like',$v->fechaEntrega.'%')->first();
+				if($conf){
+					$actos[$k]->status=$conf->realizada;
+				}
+				else{
+					$actos[$k]->status=-1;
+				}
+			}
+		}
+		return $actos;
+	}
+
 	public function index(){
 		$depa=Departamento::with(['divisions'=>function($q){
 			$q->with(['unidads'=>function($q){
@@ -27,7 +114,26 @@ class AdminController extends Controller
 		foreach ($depa as $k=>$v){
 			$depa[$k]->user=User::find($v->user_id);
 			foreach ($v->divisions as $i=>$vv) {
-			$depa[$k]->divisions[$i]->user=User::find($vv->user_id);
+				$depa[$k]->divisions[$i]->user=User::find($vv->user_id);
+				foreach ($vv->unidads as $j=>$v) {
+					$actos=$this->evalua($depa[$k]->divisions[$i]->unidads[$j]->actividades);
+					unset($depa[$k]->divisions[$i]->unidads[$j]->actividades);
+					$depa[$k]->divisions[$i]->unidads[$j]->actividades=$actos;//$this->evalua($v->actividades);
+					$done=0;
+					$notDone=0;
+					$inProcess=0;
+					foreach ($actos as $acto) {
+						if($acto->status==1)
+							$done++;
+						if($acto->status==0)
+							$noDone++;
+						if($acto->status==-1)
+							$inProcess++;
+					}
+					$depa[$k]->divisions[$i]->unidads[$j]->done=$done;
+					$depa[$k]->divisions[$i]->unidads[$j]->notDone=$notDone;
+					$depa[$k]->divisions[$i]->unidads[$j]->inProcess=$inProcess;
+				}
 			}
 		}
 		return response()->json($depa);
@@ -210,10 +316,8 @@ class AdminController extends Controller
 				->join('departamentos','divisions.departamento_id','departamentos.id')
 				->where('actividads.id', $jera->act_referencia)
 				->first();
-			/*foreach ($actos as $k=>$v) {
-				$actos[$k]=$this->status($v);
-			}*/
-			array_push($actividades, $actos);
+			$actos=$this->evalua([$actos]);
+			array_push($actividades, $actos[0]);
 		}
 		}
 		return response()->json($actividades);
