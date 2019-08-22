@@ -60,7 +60,7 @@ class EmpleadoController extends Controller
 					$q->where('fecha',date('Y-m-d'));
 				},
 				'confirmacions'=>function($q){
-					$q->where('fecha',date('Y-m-d'));
+					$q->where('fecha',date('Y-m-d'))->where('realizada',1);
 				}
 			])
 			->get();
@@ -289,8 +289,26 @@ class EmpleadoController extends Controller
 		$conf->user_id=$request->user()->id;
 		$conf->fecha=date('Y-m-d');
 		$conf->hora=date('H:i:s');
-		$conf->created_at=$request->fechaEntrega.' '.$request->horaEntrega;
+		$conf->created_at=$request->fechaEntrega;
 		$conf->save();
+		return response()->json($conf);
+	}
+	public function notDone(Request $request)
+	{
+		$conf=Confirmacion::where('actividad_id',$request->id)
+			->where('created_at',date('Y-m-d').' '.$request->hora)
+			->where('realizada',0)
+			->first();
+		if(!$conf){
+			$conf=new Confirmacion();
+			$conf->actividad_id=$request->id;
+			$conf->user_id=$request->user()->id;
+			$conf->fecha=date('Y-m-d');
+			$conf->hora=$request->hora;
+			$conf->realizada=false;
+			$conf->created_at=date('Y-m-d').' '.$request->hora;
+			$conf->save();
+		}
 		return response()->json($conf);
 	}
 }
