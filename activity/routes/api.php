@@ -54,4 +54,5 @@ Route::group(['middleware' => 'auth:api'], function() {
 	Route::post('reportar','EmpleadoController@reportar');
 	Route::get('assigned','EmpleadoController@assigned');
 	Route::post('hecha','EmpleadoController@hecha');
+	Route::post('notDone','EmpleadoController@notDone');
 });
