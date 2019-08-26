@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "axios": "^0.19.0",
+    "bivrost-axios-adapter": "^3.2.2",
+    "bivrost-save-blob-adapter": "^3.2.2",
     "jquery": "^3.4.1",
     "materialize-css": "^1.0.0-rc.2",
     "node-sass": "^4.12.0",

@@ -17,6 +17,8 @@ class CreateReportadosTable extends Migration
             $table->bigIncrements('id');
 	    $table->unsignedBigInteger('user_id')->nullable();
 	    $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+	    $table->unsignedBigInteger('reportante')->nullable();
+	    $table->foreign('reportante')->references('id')->on('users')->onDelete('cascade');
 	    $table->unsignedBigInteger('actividad_id')->nullable();
 	    $table->foreign('actividad_id')->references('id')->on('actividads')->onDelete('cascade');
             $table->timestamps();

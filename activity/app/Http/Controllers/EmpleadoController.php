@@ -38,7 +38,7 @@ class EmpleadoController extends Controller
 	}
 	public function uploadImage(Request $request){
 		$path = storage_path().'/img/users/';
-		file_put_contents($path.$request->user()->id.'.jpeg', base64_decode(explode(',',$request->img)[1]));
+		file_put_contents($path.$request->user_id.'.jpeg', base64_decode(explode(',',$request->img)[1]));
 		return response()->json($request);
 	}
 	public function misActividades(Request $request)
@@ -224,6 +224,7 @@ class EmpleadoController extends Controller
 			$report= new Reportado();
 			$report->actividad_id=$request->actividad_id;
 			$report->user_id=$user['id'];
+			$report->reportante=$request->user()->id;
 			$report->save();
 		}
 		return response()->json($request);

@@ -1,8 +1,12 @@
 import React,{useEffect, useContext, useState} from 'react';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import M from 'materialize-css';
 import {UserContext} from '../../UserContext';
 import { axios } from '../../config'
 import Arbol from './arbol'
+import Report from './report'
+import Reported from './reported'
+import Users from './users'
 
 const Dash=()=>{
 	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
@@ -41,7 +45,7 @@ const Dash=()=>{
 		<nav className="grey darken-2">
 			<div className="nav-wrapper container">
 				<a href="#!" data-target="slide-out" className="sidenav-trigger"><i className="material-icons">menu</i></a>
-				<a href="#!" className="brand-logo">Actividades</a>
+				<Link to="/" className="brand-logo">Actividades</Link>
 				<ul id="nav-mobile" className="right hide-on-med-and-down">
 					{/*<li><a href="#!">Item 1</a></li>
 					<li><a href="#!">Item 2</a></li>
@@ -53,6 +57,9 @@ const Dash=()=>{
 							<input onChange={(e)=>_upexcel(e)} type="file" className="form-control-file"/>
 							</a>
 						</li>
+						<li><Link to="/report" className="waves-effect">Reportes</Link></li>
+						<li><Link to="/users" className="waves-effect">Usuarios</Link></li>
+						<li><Link to="/reported" className="waves-effect">Usuarios Reportados</Link></li>
 						<li className="divider"></li>
 						<li><a href="#!" onClick={_salir}>Salir</a></li>
 					</ul>
@@ -63,25 +70,30 @@ const Dash=()=>{
 				<li>
 					<div className="user-view">
 						<div className="background">
-							<img src="http://materializecss.com/images/office.jpg" alt="Background User View" ></img>
+							<img src={axios.defaults.baseURL+"/assets/img/U.png"} style={{width:300}}/>
 						</div>
-						<a href="#user"><img className="circle" src="http://materializecss.com/images/yuna.jpg" alt="Avatar User View" /></a>
-						<a href="#name"><span className="white-text name">Pretty Woman</span></a>
-						<a href="#email"><span className="white-text email">prettywoman@gmail.com</span></a>
+						<div style={{width:100}}>
+							<div className="ratio img-responsive img-circle" style={{backgroundImage:"url("+axios.defaults.baseURL+'assets/img/users/'+user.id+'.jpeg'+")"}}></div>
+						</div>
+						<a href="#name"><span className="white-text name" style={{fontSize:40,fontWeight: 'bold'}}>{user.name}</span></a>
+						<a href="#email"><span className="white-text email" style={{fontWeight: 'bold'}}>{user.email}</span></a>
 					</div>
 				</li>
-				<li><a className="waves-effect" href="#!">Item 1</a></li>
-				<li><a className="waves-effect" href="#!">Item 2</a></li>
-				<li><a className="waves-effect" href="#!">Item 3</a></li>
-				<ul id="dropdown2" className="dropdown-content">
-					<li><a href="#!">Subir excel</a></li>
-					<li className="divider"></li>
-					<li><a href="#!">Salir</a></li>
-				</ul>
-				<li><a className="dropdown-trigger" href="#!" data-target="dropdown2">Opciones<i className="material-icons right">arrow_drop_down</i></a></li>
+				<li>
+					<a href="#!" className="file-field input-field">Subir excel
+						<input onChange={(e)=>_upexcel(e)} type="file" className="form-control-file"/>
+					</a>
+				</li>
+				<li><Link to="/report" className="waves-effect">Reportes</Link></li>
+				<li><Link to="/reported" className="waves-effect">Usuarios Reportados</Link></li>
+				<li className="divider"></li>
+				<li><a href="#!" onClick={_salir}>Salir</a></li>
 			</ul>
 		</nav>
-		<Arbol />
+		<Route path="/" exact component={Arbol} />
+		<Route path="/report" exact component={Report} />
+		<Route path="/reported" exact component={Reported} />
+		<Route path="/users" exact component={Users} />
 	</div>
   );
 }
