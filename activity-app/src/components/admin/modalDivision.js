@@ -1,19 +1,35 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import AssignUser from './assignUser'
 import { axios } from '../../config'
+import {UserContext} from '../../UserContext';
 
 
 const Division = ({division,setDivision}) =>{
+	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
 	const [actividades, setActividades]=useState([{actividad:'actividad1',descripcion:'descripcion1', status:'En Proceso'}]);
 	const [data, setData]=useState({newActividad:{actividad:''}})
 	
+	
+	useEffect(()=>{
+		const ar=arbol.map(d=>{
+			const di=d.divisions.map(div=>{
+				if(div.id==division.id)
+					return division
+				return div
+			})
+			return {...d,divisions:di}
+		})
+		setArbol(ar)
+	},[division])
+
 	const _assignDiv=(user)=>{
 		axios.post('/api/jefe_div',{division_id:division.id,user_id:user.id})
 			.then((r)=>{
 				setDivision({...division,user})
 			})
-			.catch(r=>alert('ha ocurrido un error'))
+			.catch(r=>alert(r))
 	}
+
 	const _newActivity=(e)=>{
 		if(e.key=='Enter'){
 		axios.post('/api/newActivityToUser',{...data.newActividad,user_id:division.user.id})
@@ -34,12 +50,12 @@ const Division = ({division,setDivision}) =>{
 					<div className="col s3">
 						<div className="card">
 							<div className="card-image">
-								<img src={axios.defaults.baseURL+'assets/img/users/'+division.user.id+'.jpg'} onError={(e)=>e.target.src=axios.defaults.baseURL+"assets/img/logo.jpeg"} alt="img"/>
+								<img src={axios.defaults.baseURL+'assets/img/users/'+division.user.id+'.jpeg'} onError={(e)=>e.target.src=axios.defaults.baseURL+"assets/img/logo.jpeg"} alt="img"/>
 								<span className="card-title">{division.user.name}</span>
 							</div>
 							<div className="card-contenti">
 								<p>Jefe de division</p>
-								<p>Celular: 33987765</p>
+								<p>Celular: {division.user.celular}</p>
 								<p>Correo: <a href={'mailto:'+division.user.email}>{division.user.email}</a></p>
 							</div>
 							<div className="card-action">

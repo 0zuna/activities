@@ -1,18 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import AssignUser from './assignUser'
 import { axios } from '../../config'
+import {UserContext} from '../../UserContext';
 
 
 const Departamento = ({departamento,setDepartamento}) =>{
+	const [user,setUser,auth,setAuth,arbol,setArbol]=useContext(UserContext);
 	const [actividades, setActividades]=useState([{actividad:'actividad1',descripcion:'descripcion1', status:'En Proceso'}]);
 	const [data, setData]=useState({newActividad:{actividad:''}})
 	
+	useEffect(()=>{
+		const ar=arbol.map(d=>{
+			if(d.id==departamento.id)
+				return departamento
+			return d
+		})
+		setArbol(ar)
+	},[departamento])
+
 	const _assignDep=(user)=>{
 		axios.post('/api/jefe_dep',{departamento_id:departamento.id,user_id:user.id})
 			.then((r)=>{
 				setDepartamento({...departamento,user})
 			})
-			.catch(r=>alert('ha ocurrido un error'))
+			.catch(r=>alert(r))
 	}
 	const _newActivity=(e)=>{
 		if(e.key=='Enter'){
@@ -34,12 +45,12 @@ const Departamento = ({departamento,setDepartamento}) =>{
 					<div className="col s3">
 						<div className="card">
 							<div className="card-image">
-								<img src="https://media.revistagq.com/photos/5ca5f030267a328ad27242c3/16:9/w_1920,c_limit/como_llevarte_bien_con_tu_jefe_regla_5_15_felicidad_trabajo_2065.jpg" alt='img'/>
+								<img src={axios.defaults.baseURL+'assets/img/users/'+departamento.user.id+'.jpeg'} onError={(e)=>e.target.src=axios.defaults.baseURL+"assets/img/logo.jpeg"} alt="img"/>
 								<span className="card-title">{departamento.user.name}</span>
 							</div>
 							<div className="card-contenti">
 								<p>Jefe del departamento</p>
-								<p>Celular: 33987765</p>
+								<p>Celular: {departamento.user.celular}</p>
 								<p>Correo: <a href={'mailto:'+departamento.user.email}>{departamento.user.email}</a></p>
 							</div>
 							<div className="card-action">
@@ -60,19 +71,19 @@ const Departamento = ({departamento,setDepartamento}) =>{
 							</div>
 							<div className="card-content grey lighten-4">
 								<div id="tab_enproceso">
-									<div className="row">
+								{/*<div className="row">
 										<div className="input-field col s12">
 											<input id="act" type="text" onKeyDown={(e)=>_newActivity(e)} onChange={e=>setData({...data,newActividad:{actividad:e.target.value}})} value={data.newActividad.actividad}/>
 											<label htmlFor="act">Nueva Actividad</label>
 										</div>
 									</div>
+									*/}
 									<ul className="collapsible">
 									{departamento.user.actividades&&departamento.user.actividades.map((a,i)=>
 										<li key={i}>
 											<div className="collapsible-header">
 												<i className="material-icons">assignment</i>
 												{a.actividad}
-												<span className="new badge">1</span>
 											</div>
 										</li>
 									)}
