@@ -6,7 +6,32 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 	useEffect(()=>{
 		var elems = document.querySelectorAll('select');
 		M.FormSelect.init(elems, {});
-	},[data])
+		//fecha
+		var elem = document.querySelector('#date');
+		M.Datepicker.init(elem, {format:'yyyy-mm-dd',autoClose:false,i18n:{
+			cancel:'cancelar',
+			months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+			monthsShort: [ 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic' ],
+			weekdays: [ 'Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado' ],
+			weekdaysShort: [ 'Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab' ],
+			weekdaysAbbrev:	['D','L','M','M','J','V','S'],
+		},
+			onSelect:(d)=>{
+			//console.log(d.toISOString().substr(0,10))
+			setData({...data,actividad:{...data.actividad,fecha:d.toISOString().substr(0,10)}})
+			},
+			/*onCloseEnd:()=>{
+			setData({...data,actividad:{...data.actividad,fecha:d.toISOString().substr(0,10)}})
+			}*/
+		});
+		//hora
+		M.Timepicker.init(document.querySelectorAll('#time'), {
+			twelveHour:false,
+			onCloseEnd:()=>{
+				setData({...data,actividad:{...data.actividad,hora:document.querySelector('#time').value}})
+			}
+		});
+	},[data.actividad.tipo])
 	const _newSub=(e)=>{
 		if(e.key==='Enter'){
 			axios.post('/api/newSubActivity',{actividad_id:data.actividad.id,subactividad:data.newSubActividad})
@@ -93,10 +118,14 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 						</div>
 					</form>
 					<div className="col">
-						<a href="#!"><i className="material-icons">file_download</i>Reporte</a>
+					<div className="scroll-box">
+						{data.actividad.files&&data.actividad.files.map((f,i)=>
+						<p key={i} ><a href="#!"><i className="material-icons">file_download</i>{f.name}</a></p>
+						)}
+					</div>
 					</div>
 				</div>
-				<div className="row">
+				{/*<div className="row">
 					<span>Actividades</span>
 					<div className="row">
 						<div className="input-field col s12">
@@ -109,7 +138,7 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 						return <a key={k} href="#!" className="collection-item">{v.subactividad} <span className="badge yellow white-text">{'En Proceso'}</span></a>
 					})}
 					</div>
-				</div>
+				</div>*/}
 			</div>
 			<div className="card-action">
 				<a className="waves-effect waves-light btn black" onClick={()=>_updateActivity()}>Guardar</a>
