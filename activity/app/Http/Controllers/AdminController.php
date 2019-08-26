@@ -13,6 +13,10 @@ use App\Jerarquia;
 use App\Periodicidad;
 use App\Confirmacion;
 use Carbon\Carbon;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Reportado;
+
 
 
 class AdminController extends Controller
@@ -107,7 +111,7 @@ class AdminController extends Controller
 		$depa=Departamento::with(['divisions'=>function($q){
 			$q->with(['unidads'=>function($q){
 				$q->with(['actividades'=>function($q){
-						$q->with(['subActividades','users','periodicidad']);
+						$q->with(['subActividades','users','periodicidad','files']);
 					}]);
 			}]);
 		}])->get();
@@ -126,7 +130,7 @@ class AdminController extends Controller
 						if($acto->status==1)
 							$done++;
 						if($acto->status==0)
-							$noDone++;
+							$notDone++;
 						if($acto->status==-1)
 							$inProcess++;
 					}
@@ -139,7 +143,7 @@ class AdminController extends Controller
 		return response()->json($depa);
 	}
 	public function users(){
-		return response()->json(User::all());
+		return response()->json(User::orderBy('name')->get());
 	}
 	public function jefe_dep(Request $request){
 		$dep=Departamento::find($request->departamento_id);
@@ -328,5 +332,92 @@ class AdminController extends Controller
 			->where('actividad_id',$request->actividad_id)
 			->delete();
 		return response()->json($request);
+	}
+	public function usersReports($user,$init,$fin){
+		if($user==0){
+		$us=\DB::table('users')
+			->select(
+				'users.name',
+				'users.paterno',
+				'users.materno',
+				'actividad_user.created_at as assign',
+				'actividads.actividad',
+				'confirmacions.realizada',
+				'actividads.tipo',
+				'confirmacions.fecha as fechaEntrega',
+				'confirmacions.hora as horaEntrega',
+				'actividads.fecha as fechaSolicita',
+				'actividads.hora as horaSolicita'
+			)
+			->join('confirmacions','user_id','users.id')
+			->join('actividads','confirmacions.actividad_id','actividads.id')
+			->join('actividad_user','actividad_user.actividad_id','actividads.id')
+			->whereBetween('confirmacions.created_at',[$init,$fin])
+			->get();
+		}else{
+		$us=\DB::table('users')
+			->select(
+				'users.name',
+				'users.paterno',
+				'users.materno',
+				'actividad_user.created_at as assign',
+				'actividads.actividad',
+				'confirmacions.realizada',
+				'actividads.tipo',
+				'confirmacions.fecha as fechaEntrega',
+				'confirmacions.hora as horaEntrega',
+				'actividads.fecha as fechaSolicita',
+				'actividads.hora as horaSolicita'
+			)
+			->join('confirmacions','user_id','users.id')
+			->join('actividads','confirmacions.actividad_id','actividads.id')
+			->join('actividad_user','actividad_user.actividad_id','actividads.id')
+			->where('users.id',$user)
+			->whereBetween('confirmacions.created_at',[$init,$fin])
+			->get();
+		}
+		//return $us;
+		foreach ($us as $k=>$v) {
+			$solicitada=Carbon::parse($v->fechaSolicita);
+			$entregada=Carbon::parse($v->fechaEntrega);
+			$us[$k]->prod=(string)$solicitada->diffInDays($entregada);
+		}
+		$realizadas=0;
+		$norealizadas=0;
+		$productividad=0;
+		foreach ($us as $v) {
+			if($v->realizada==1){
+				$realizadas++;
+			}
+			if($v->realizada==0){
+				$norealizadas++;
+			}
+			$productividad=(int)$v->prod+$productividad;
+		}
+		$res=collect([['total'=>count($us),'realizadas'=>$realizadas,'norealizadas'=>(string)$norealizadas,'productividad'=>(string)$productividad]]);
+		return Excel::download(new UsersExport($us,$res), 'users.xlsx');
+	}
+	public function reported(Request $request)
+	{
+		$report=Reportado::selectRaw('CONCAT(name," ",paterno," ",materno) AS reportado,actividads.actividad,reportados.created_at as fecha')
+			->selectRaw('(select concat(users.name," ",users.paterno," ",users.materno) from users,reportados where reportados.reportante=users.id) as reportante')
+			->join('users','reportados.user_id','users.id')
+			->join('actividads','reportados.actividad_id','actividads.id')
+			->get();
+		return response()->json($report);
+	}
+	public function newUser(Request $request)
+	{
+		$user= new User();
+		$user->name=$request->name;
+		$user->paterno=$request->paterno;
+		$user->materno=$request->materno;
+		$user->celular=$request->celular;
+		$user->email=$request->email;
+		$user->password=bcrypt($request->password);
+		$user->save();
+		$path = storage_path().'/img/users/';
+		file_put_contents($path.$user->id.'.jpeg', base64_decode(explode(',',$request->img)[1]));
+		return response()->json($user,201);
 	}
 }
