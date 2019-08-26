@@ -58,30 +58,31 @@ const Perfil = () => {
 			<div className="row" style={{backgroundColor:''}}>
 				<div className="row">
 					<div className="input-field col s4">
-						<input value={perfil.name||''} onChange={(e)=>setPerfil({...perfil,name:e.target.value})} id="nombre" type="text" />
+						<input disabled value={perfil.name||''} onChange={(e)=>setPerfil({...perfil,name:e.target.value})} id="nombre" type="text" />
 						<label htmlFor="nombre">Nombre</label>
 					</div>
 					<div className="input-field col s4">
-						<input value={perfil.paterno||''} onChange={(e)=>setPerfil({...perfil,paterno:e.target.value})} id="apellidoP" type="text" />
+						<input disabled value={perfil.paterno||''} onChange={(e)=>setPerfil({...perfil,paterno:e.target.value})} id="apellidoP" type="text" />
 						<label htmlFor="apellidoP">Apellido Paterno</label>
 					</div>
 					<div className="input-field col s4">
-						<input value={perfil.materno||''} onChange={(e)=>setPerfil({...perfil,materno:e.target.value})} id="apellidoM" type="text" />
+						<input disabled value={perfil.materno||''} onChange={(e)=>setPerfil({...perfil,materno:e.target.value})} id="apellidoM" type="text" />
 						<label htmlFor="apellidoM">Apellido Materno</label>
 					</div>
 				</div>
 				<div className="row">
 					<div className="input-field col s6">
 						<i className="material-icons prefix">email</i>
-						<input value={perfil.email||''} onChange={(e)=>setPerfil({...perfil,email:e.target.value})} id="email" type="email" />
+						<input disabled value={perfil.email||''} onChange={(e)=>setPerfil({...perfil,email:e.target.value})} id="email" type="email" />
 						<label htmlFor="email">Email</label>
 					</div>
 					<div className="input-field col s6">
 						<i className="material-icons prefix">call</i>
-						<input value={perfil.celular||''} onChange={(e)=>setPerfil({...perfil,celular:e.target.value})} id="telefono" type="text"/>
+						<input disabled value={perfil.celular||''} onChange={(e)=>setPerfil({...perfil,celular:e.target.value})} id="telefono" type="text"/>
 						<label htmlFor="telefono">Celular</label>
 					</div>
 				</div>
+				{/*
 				<div className="row">
 					<div className="input-field col s3">
 						<input value={perfil.unidades[0].division.departamento.departamento||''} id="departamento" type="text" disabled />
@@ -99,7 +100,8 @@ const Perfil = () => {
 						<input value={perfil.puesto||''} onChange={(e)=>setPerfil({...perfil,puesto:e.target.value})} id="puesto" type="text" />
 						<label htmlFor="puesto">Puesto</label>
 					</div>
-				</div>
+				</div>*/
+				}
 				<div className="row">
 					<div className="col s12">
 						<div className="row">

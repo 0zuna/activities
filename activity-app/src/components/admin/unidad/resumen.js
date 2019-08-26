@@ -120,7 +120,7 @@ const Resumen = ({data, setData, unidad, setUnidad}) => {
 					<div className="col">
 					<div className="scroll-box">
 						{data.actividad.files&&data.actividad.files.map((f,i)=>
-						<p key={i} ><a href="#!"><i className="material-icons">file_download</i>{f.name}</a></p>
+						<p key={i} ><a href={axios.defaults.baseURL+f.name} target='_blank'><i className="material-icons">file_download</i>{f.name.split('/')[3]}</a></p>
 						)}
 					</div>
 					</div>

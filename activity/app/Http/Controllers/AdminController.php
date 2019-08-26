@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use App\Exports\UsersExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Reportado;
+use DB;
 
 
 
@@ -34,7 +35,12 @@ class AdminController extends Controller
 			}
 			if($v->tipo=='semanal'){
 				$days=['lunes'=>1,'martes'=>2,'miercoles'=>3,'jueves'=>4,'viernes'=>5,'sabado'=>6];
+				if($days[$v->periodicidad->dia]){
 				$diaSolicita=$days[$v->periodicidad->dia];//1
+				}
+				else{
+				$diaSolicita=$days[1];//1
+				}
 				$diaNow=Carbon::now()->dayOfWeek;//3
 				$diasRestantes=abs(abs($diaSolicita-$diaNow)-7);
 				$newDay=Carbon::now()->addDay($diasRestantes);
@@ -400,10 +406,15 @@ class AdminController extends Controller
 	public function reported(Request $request)
 	{
 		$report=Reportado::selectRaw('CONCAT(name," ",paterno," ",materno) AS reportado,actividads.actividad,reportados.created_at as fecha')
-			->selectRaw('(select concat(users.name," ",users.paterno," ",users.materno) from users,reportados where reportados.reportante=users.id) as reportante')
+			->selectRaw('(select concat(users.name," ",users.paterno," ",users.materno) from users join reportados on reportados.reportante=users.id) as reportante')
 			->join('users','reportados.user_id','users.id')
 			->join('actividads','reportados.actividad_id','actividads.id')
 			->get();
+		$report=DB::select(DB::raw('select concat(name," ",paterno," ",materno) as reportado,reportados.reportante ,actividads.actividad, reportados.created_at as fecha from reportados join users on users.id=reportados.user_id join actividads on reportados.actividad_id=actividads.id'));
+		foreach ($report as $k=>$v) {
+			$user=User::find($v->reportante);
+			$report[$k]->reportante=$user->name.' '.$user->paterno.' '.$user->materno;
+		}
 		return response()->json($report);
 	}
 	public function newUser(Request $request)
