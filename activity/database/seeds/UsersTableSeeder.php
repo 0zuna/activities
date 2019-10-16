@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
 	$user->name='Erik Admin';
 	$user->email='admin@usupso.com.mx';
 	$user->rol='admin';
-        $user->password= bcrypt('1');
+        $user->password= bcrypt('hola');
 	$user->save();
 
 	$user=new App\User();

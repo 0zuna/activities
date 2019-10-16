@@ -45,7 +45,7 @@ const Dash=()=>{
 		<nav className="grey darken-2">
 			<div className="nav-wrapper container">
 				<a href="#!" data-target="slide-out" className="sidenav-trigger"><i className="material-icons">menu</i></a>
-				<Link to="/" className="brand-logo">Actividades</Link>
+				<Link to="/ActivitieSystem/" className="brand-logo">Actividades</Link>
 				<ul id="nav-mobile" className="right hide-on-med-and-down">
 					{/*<li><a href="#!">Item 1</a></li>
 					<li><a href="#!">Item 2</a></li>
@@ -57,9 +57,9 @@ const Dash=()=>{
 							<input onChange={(e)=>_upexcel(e)} type="file" className="form-control-file"/>
 							</a>
 						</li>
-						<li><Link to="/report" className="waves-effect">Reportes</Link></li>
-						<li><Link to="/users" className="waves-effect">Usuarios</Link></li>
-						<li><Link to="/reported" className="waves-effect">Usuarios Reportados</Link></li>
+						<li><Link to="/ActivitieSystem/report" className="waves-effect">Reportes</Link></li>
+						<li><Link to="/ActivitieSystem/users" className="waves-effect">Usuarios</Link></li>
+						<li><Link to="/ActivitieSystem/reported" className="waves-effect">Usuarios Reportados</Link></li>
 						<li className="divider"></li>
 						<li><a href="#!" onClick={_salir}>Salir</a></li>
 					</ul>
@@ -84,16 +84,16 @@ const Dash=()=>{
 						<input onChange={(e)=>_upexcel(e)} type="file" className="form-control-file"/>
 					</a>
 				</li>
-				<li><Link to="/report" className="waves-effect">Reportes</Link></li>
-				<li><Link to="/reported" className="waves-effect">Usuarios Reportados</Link></li>
+				<li><Link to="/ActivitieSystem/report" className="waves-effect">Reportes</Link></li>
+				<li><Link to="/ActivitieSystem/reported" className="waves-effect">Usuarios Reportados</Link></li>
 				<li className="divider"></li>
 				<li><a href="#!" onClick={_salir}>Salir</a></li>
 			</ul>
 		</nav>
-		<Route path="/" exact component={Arbol} />
-		<Route path="/report" exact component={Report} />
-		<Route path="/reported" exact component={Reported} />
-		<Route path="/users" exact component={Users} />
+		<Route path="/ActivitieSystem" exact component={Arbol} />
+		<Route path="/ActivitieSystem/report" exact component={Report} />
+		<Route path="/ActivitieSystem/reported" exact component={Reported} />
+		<Route path="/ActivitieSystem/users" exact component={Users} />
 	</div>
   );
 }
