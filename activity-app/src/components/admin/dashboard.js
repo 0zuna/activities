@@ -85,6 +85,7 @@ const Dash=()=>{
 					</a>
 				</li>
 				<li><Link to="/report" className="waves-effect">Reportes</Link></li>
+				<li><Link to="/users" className="waves-effect">Usuarios</Link></li>
 				<li><Link to="/reported" className="waves-effect">Usuarios Reportados</Link></li>
 				<li className="divider"></li>
 				<li><a href="#!" onClick={_salir}>Salir</a></li>

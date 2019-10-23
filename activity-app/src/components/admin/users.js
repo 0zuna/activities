@@ -211,7 +211,7 @@ const Users = () => {
 		</div>
 			<div className="row">
 			{users.map((u,i)=>
-				<div key={i} className="col s3">
+				<div key={i} className="col m3">
 					<div className="card horizontal">
 						<div className="card-image" style={{padding:20}}>
 							<div style={{width:100}}>
