@@ -44,23 +44,23 @@ const Dashboard = () => {
 					</li>
 					{/*<li><a href="#!" className="waves-effect"><i className="material-icons">today</i>Mis Actividades Diarias</a></li>
 					*/}
-					<li><Link to="/" className="waves-effect"><i className="material-icons">today</i>Mis Actividades Diarias</Link></li>
-					<li><Link to="/assigned" className="waves-effect"><i className="material-icons" style={{color:'purple'}}>new_releases</i>Mis Actividades Asignadas</Link></li>
-					<li><Link to="/finish" className="waves-effect"><i className="material-icons" style={{color: 'green'}}>check</i>Mis actividades realizadas</Link></li>
-					<li><Link to="/forget" className="waves-effect"><i className="material-icons" style={{color: 'red'}}>sentiment_very_dissatisfied</i>Actividades Olvidadas</Link></li>
+					<li><Link to="/ActivitieSystem/" className="waves-effect"><i className="material-icons">today</i>Mis Actividades Diarias</Link></li>
+					<li><Link to="/ActivitieSystem/assigned" className="waves-effect"><i className="material-icons" style={{color:'purple'}}>new_releases</i>Mis Actividades Asignadas</Link></li>
+					<li><Link to="/ActivitieSystem/finish" className="waves-effect"><i className="material-icons" style={{color: 'green'}}>check</i>Mis actividades realizadas</Link></li>
+					<li><Link to="/ActivitieSystem/forget" className="waves-effect"><i className="material-icons" style={{color: 'red'}}>sentiment_very_dissatisfied</i>Actividades Olvidadas</Link></li>
 					<li><div className="divider"></div></li>
 					<li><a className="subheader">Configuración</a></li>
-					<li><Link to="/myData" className="waves-effect" href="#!"><i className="material-icons" style={{color: 'blue'}}>account_circle</i>Mis Datos</Link></li>
+					<li><Link to="/ActivitieSystem/myData" className="waves-effect" href="#!"><i className="material-icons" style={{color: 'blue'}}>account_circle</i>Mis Datos</Link></li>
 					<li><a onClick={_salir} className="waves-effect"><i className="material-icons">exit_to_app</i>Salir</a></li>
 				</ul>
 				<a href="#" data-target="slide-out" className="sidenav-trigger"><i className="material-icons">menu</i></a>
 			</div>
 			<div className="col s12 m8 l9">
-				<Route path="/" exact component={DayActivities} />
-				<Route path="/finish" exact component={ActivitiesDone} />
-				<Route path="/forget" exact component={ActivitiesForget} />
-				<Route path="/myData" exact component={Perfil} />
-				<Route path="/assigned" exact component={Assigned} />
+				<Route path="/ActivitieSystem/" exact component={DayActivities} />
+				<Route path="/ActivitieSystem/finish" exact component={ActivitiesDone} />
+				<Route path="/ActivitieSystem/forget" exact component={ActivitiesForget} />
+				<Route path="/ActivitieSystem/myData" exact component={Perfil} />
+				<Route path="/ActivitieSystem/assigned" exact component={Assigned} />
 			</div>
 		</div>
 	)
