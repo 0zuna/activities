@@ -8,7 +8,7 @@
     "bivrost-save-blob-adapter": "^3.2.2",
     "jquery": "^3.4.1",
     "materialize-css": "^1.0.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "react": "^16.11.0",
     "react-beautiful-dnd": "^11.0.5",
     "react-dom": "^16.11.0",
